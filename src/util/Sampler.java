@@ -1,12 +1,3 @@
-/********************************************************************************
-   Organization		: Drexel University
-   Institute		: Computer Science Department
-   Authors			: Santiago Ontanon
-   Class			: Sampler
-   Function		: This class contains methods to sample
-                          from a given distribution. Including support
-                          for exploration vs exploitation.
- *********************************************************************************/
 package util;
 
 import java.util.LinkedList;
