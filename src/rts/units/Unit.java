@@ -21,11 +21,11 @@ import util.XMLWriter;
  * @author santi
  */
 public class Unit implements Serializable {
-
+    private static final long serialVersionUID = 1L;
     /**
      * The type of this unit (worker, ranged, barracks, etc.)
      */
-    UnitType type;
+    transient UnitType type;
 
     /**
      * Indicates the ID to assign to a new unit. It is incremented when the
