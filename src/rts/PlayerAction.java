@@ -3,6 +3,7 @@ package rts;
 import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 import org.jdom.Element;
 
@@ -54,8 +55,12 @@ public class PlayerAction {
             }
         }
         return true;
-    }    
-    
+    }  
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(actions, r);  // whatever fields equals() compares
+    }
     
     /**
      * Returns whether there are no player actions
