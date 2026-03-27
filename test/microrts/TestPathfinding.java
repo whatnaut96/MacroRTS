@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import ai.abstraction.pathfinding.AStarPathFinding;
 import ai.abstraction.pathfinding.OldAStarPathFinding;

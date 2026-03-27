@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import rts.GameState;
 import rts.PhysicalGameState;

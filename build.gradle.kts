@@ -18,31 +18,29 @@ java {
 }
 
 dependencies {
-    // JUnit 5
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-
-    // CLI
     implementation("info.picocli:picocli:4.7.7")
-
-    // JSON (API + implementation)
     implementation("jakarta.json:jakarta.json-api:2.1.3")
     runtimeOnly("org.eclipse.parsson:parsson:1.1.5")
-
-    // Local jars
-    implementation(fileTree("lib") {
-        include("*.jar")
-        exclude("weka.jar")
-    })
+    implementation(fileTree("lib") { include("*.jar") })
+    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.test {
     useJUnitPlatform()
+    jvmArgs("--enable-preview")
+    filter {
+        isFailOnNoMatchingTests = false
+    }
 }
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
-    options.compilerArgs.add("--enable-preview")
+    options.compilerArgs.addAll(listOf("--enable-preview", "--release", "25"))
+    options.compilerArgs.add("-Xlint:all")
 }
 
 tasks.withType<JavaExec>().configureEach {
@@ -56,30 +54,22 @@ application {
 sourceSets {
     main {
         java {
-            setSrcDirs(listOf("src"))
+            setSrcDirs(listOf("src")) 
+            exclude("ai/synthesis/**")
+            exclude("tests/bayesianmodels/**")
         }
-        resources {
-            setSrcDirs(listOf("src")) // Only if you have config files/images in there
-        }
+        resources { setSrcDirs(listOf("resources")) }
     }
-    // If your tests are also directly in src/tests
     test {
-        java {
-            setSrcDirs(listOf("src"))
-        }
+        java { setSrcDirs(listOf("test")) }
     }
 }
 
-// Shadow JAR
 tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
     archiveFileName.set("macrorts.jar")
-
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
     mergeServiceFiles()
-
     exclude("bots/**")
-
     manifest {
         attributes["Main-Class"] = "rts.MacroRTS"
     }
