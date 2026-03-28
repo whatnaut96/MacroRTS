@@ -9,7 +9,6 @@ import ai.abstraction.pathfinding.PathFinding;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 import util.XMLWriter;
@@ -55,7 +54,7 @@ public class RangedAttack extends AbstractAction  {
     }
     
 
-    public UnitAction execute(GameState gs, ResourceUsage ru) {
+    public UnitAction1 execute(GameState gs, ResourceUsage ru) {
         
         int rdx = 0;
         int rdy = 0;
@@ -73,16 +72,16 @@ public class RangedAttack extends AbstractAction  {
         
         
         if(d <= (getUnit().getAttackRange()) - 1 && rd > 2 && getUnit().getMoveTime() < target.getMoveTime()){
-            UnitAction move = pf.findPathToPositionInRange(getUnit(), racks.getX()+racks.getY()*gs.getPhysicalGameState().getWidth(), getUnit().getAttackRange(), gs, ru);
+            UnitAction1 move = pf.findPathToPositionInRange(getUnit(), racks.getX()+racks.getY()*gs.getPhysicalGameState().getWidth(), getUnit().getAttackRange(), gs, ru);
             if (move!=null && gs.isUnitActionAllowed(getUnit(), move)) return move;
             return null;
         }
         else if (d<=getUnit().getAttackRange()) {
-            return new UnitAction(UnitAction.TYPE_ATTACK_LOCATION,target.getX(),target.getY());
+            return new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION,target.getX(),target.getY());
         } else {
             // move towards the unit:
     //        System.out.println("AStarAttak returns: " + move);
-            UnitAction move = pf.findPathToPositionInRange(getUnit(), target.getX()+target.getY()*gs.getPhysicalGameState().getWidth(), getUnit().getAttackRange(), gs, ru);
+            UnitAction1 move = pf.findPathToPositionInRange(getUnit(), target.getX()+target.getY()*gs.getPhysicalGameState().getWidth(), getUnit().getAttackRange(), gs, ru);
             if (move!=null && gs.isUnitActionAllowed(getUnit(), move)) return move;
             return null;
         }        

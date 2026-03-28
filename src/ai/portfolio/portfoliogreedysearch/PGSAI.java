@@ -19,7 +19,6 @@ import java.util.List;
 import rts.GameState;
 import rts.PlayerAction;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 import rts.units.UnitTypeTable;
@@ -175,7 +174,7 @@ public class PGSAI extends AIWithComputationBudget {
                 UnitScript s = playerScripts[i];
                 if (s != null) s = s.instantiate(u, gs);
                 if (s != null) {
-                    UnitAction ua = s.getAction(u, gs);
+                    UnitAction1 ua = s.getAction(u, gs);
                     if (ua!=null) {
                         ResourceUsage ra2 = ua.resourceUsage(u, gs.getPhysicalGameState());
                         if (ra.consistentWith(ra2, gs)) {

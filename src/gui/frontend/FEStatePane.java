@@ -95,7 +95,6 @@ import rts.PlayerAction;
 import rts.PlayerActionGenerator;
 import rts.Trace;
 import rts.TraceEntry;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 import tests.MapGenerator;
@@ -348,7 +347,7 @@ public class FEStatePane extends JPanel {
                             textArea.setText("Action generated with " + ai.getClass().getSimpleName() + " in " + (end-start) + "ms\n");
                             textArea.append(ai.statisticsString() + "\n");
                             textArea.append("Action:\n");
-                            for(Pair<Unit,UnitAction> tmp:a.getActions()) {
+                            for(Pair<Unit, UnitAction1> tmp:a.getActions()) {
                                 textArea.append("    " + tmp.m_a + ": " + tmp.m_b + "\n");
                             }
 
@@ -379,7 +378,7 @@ public class FEStatePane extends JPanel {
                             textArea.setText("Action generated with " + ai.getClass().getSimpleName() + " in " + (end-start) + "ms\n");
                             textArea.append(ai.statisticsString() + "\n");
                             textArea.append("Action:\n");
-                            for(Pair<Unit,UnitAction> tmp:a.getActions()) {
+                            for(Pair<Unit, UnitAction1> tmp:a.getActions()) {
                                 textArea.append("    " + tmp.m_a + ": " + tmp.m_b + "\n");
                             }
 
@@ -442,7 +441,7 @@ public class FEStatePane extends JPanel {
                             textArea.append("  - player 0:\n");
                             if (statePanel.getGameState().canExecuteAnyAction(0)) {
                                 PlayerActionGenerator pag0 = new PlayerActionGenerator(statePanel.getGameState(), 0);
-                                for(Pair<Unit,List<UnitAction>> tmp:pag0.getChoices()) {
+                                for(Pair<Unit,List<UnitAction1>> tmp:pag0.getChoices()) {
                                     textArea.append("    " + tmp.m_a + " has " + tmp.m_b.size() + " actions: " + tmp.m_b + "\n");
                                 }
                                 textArea.append("\n");
@@ -450,7 +449,7 @@ public class FEStatePane extends JPanel {
                             textArea.append("  - player 1:\n");
                             if (statePanel.getGameState().canExecuteAnyAction(1)) {
                                 PlayerActionGenerator pag1 = new PlayerActionGenerator(statePanel.getGameState(), 1);
-                                for(Pair<Unit,List<UnitAction>> tmp:pag1.getChoices()) {
+                                for(Pair<Unit,List<UnitAction1>> tmp:pag1.getChoices()) {
                                     textArea.append("    " + tmp.m_a + " has " + tmp.m_b.size() + " actions: " + tmp.m_b + "\n");
                                 }
                                 textArea.append("\n");

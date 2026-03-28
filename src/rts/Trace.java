@@ -256,7 +256,7 @@ public class Trace {
 
             PlayerAction pa0 = new PlayerAction();
             PlayerAction pa1 = new PlayerAction();
-            for (Pair<Unit, UnitAction> tmp : te.getActions()) {
+            for (Pair<Unit, UnitAction1> tmp : te.getActions()) {
                 if (tmp.m_a != null) {
                     if (tmp.m_a.getPlayer() == 0) {
                         pa0.addUnitAction(tmp.m_a, tmp.m_b);

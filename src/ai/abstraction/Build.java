@@ -8,7 +8,6 @@ import ai.abstraction.pathfinding.PathFinding;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 import util.XMLWriter;
@@ -51,10 +50,10 @@ public class Build extends AbstractAction  {
         w.tag("/Build");
     }    
     
-    public UnitAction execute(GameState gs, ResourceUsage ru) {
+    public UnitAction1 execute(GameState gs, ResourceUsage ru) {
         PhysicalGameState pgs = gs.getPhysicalGameState();
 //        System.out.println("findPathToAdjacentPosition to " + unit.getX() + "," + unit.getY() + " from Build: (" + x + "," + y + ")");
-        UnitAction move = pf.findPathToAdjacentPosition(unit, x+y*pgs.getWidth(), gs, ru);
+        UnitAction1 move = pf.findPathToAdjacentPosition(unit, x+y*pgs.getWidth(), gs, ru);
 //        System.out.println("Move: " + move);
         if (move!=null) {
             if (gs.isUnitActionAllowed(unit, move)) return move;
@@ -62,15 +61,15 @@ public class Build extends AbstractAction  {
         }
        
         // build:
-        UnitAction ua = null;
+        UnitAction1 ua = null;
         if (x == unit.getX() &&
-            y == unit.getY()-1) ua = new UnitAction(UnitAction.TYPE_PRODUCE,UnitAction.DIRECTION_UP,type);
+            y == unit.getY()-1) ua = new UnitAction1(UnitAction1.TYPE_PRODUCE, UnitAction1.DIRECTION_UP,type);
         if (x == unit.getX()+1 &&
-            y == unit.getY()) ua = new UnitAction(UnitAction.TYPE_PRODUCE,UnitAction.DIRECTION_RIGHT,type);
+            y == unit.getY()) ua = new UnitAction1(UnitAction1.TYPE_PRODUCE, UnitAction1.DIRECTION_RIGHT,type);
         if (x == unit.getX() &&
-            y == unit.getY()+1) ua = new UnitAction(UnitAction.TYPE_PRODUCE,UnitAction.DIRECTION_DOWN,type);
+            y == unit.getY()+1) ua = new UnitAction1(UnitAction1.TYPE_PRODUCE, UnitAction1.DIRECTION_DOWN,type);
         if (x == unit.getX()-1 &&
-            y == unit.getY()) ua = new UnitAction(UnitAction.TYPE_PRODUCE,UnitAction.DIRECTION_LEFT,type);
+            y == unit.getY()) ua = new UnitAction1(UnitAction1.TYPE_PRODUCE, UnitAction1.DIRECTION_LEFT,type);
         if (ua!=null && gs.isUnitActionAllowed(unit, ua)) return ua;        
         
 //        System.err.println("Build.execute: something weird just happened " + unit + " builds at " + x + "," + y);

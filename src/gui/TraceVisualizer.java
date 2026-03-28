@@ -4,7 +4,6 @@
  */
 package gui;
 
-import gui.PhysicalGameStatePanel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.LinkedList;
@@ -72,7 +71,7 @@ public class TraceVisualizer extends JPanel implements ListSelectionListener {
         for(int i = 0;i<t.getEntries().size();i++) {
             if (!t.getEntries().get(i).getActions().isEmpty()) {
                 StringBuilder tmp = new StringBuilder();
-                for(Pair<Unit,UnitAction> uap:t.getEntries().get(i).getActions()) {
+                for(Pair<Unit, UnitAction1> uap:t.getEntries().get(i).getActions()) {
                     tmp.append("(").append(uap.m_a.getID()).append(", ").append(uap.m_b.getActionName()).append("), ");
                 }
                 actionList[i] = tmp.toString();

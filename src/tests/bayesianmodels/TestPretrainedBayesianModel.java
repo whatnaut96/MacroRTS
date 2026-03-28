@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import org.jdom.input.SAXBuilder;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 import rts.units.UnitTypeTable;
@@ -64,7 +63,7 @@ public class TestPretrainedBayesianModel {
             }
             X_l.add(x);
         }
-        List<UnitAction> allPossibleActions = generateAllPossibleUnitActions(utt);
+        List<UnitAction1> allPossibleActions = generateAllPossibleUnitActions(utt);
         System.out.println(allPossibleActions.size() + " labels: " + allPossibleActions);
         List<Integer> Y_l = new ArrayList<>();
         for(TrainingInstance ti:instances) {
@@ -82,7 +81,7 @@ public class TestPretrainedBayesianModel {
 
     public static double crossValidation(BayesianModel model, List<int []> X_l, List<Integer> Y_l, 
                                          List<TrainingInstance> instances,
-                                         List<UnitAction> allPossibleActions,
+                                         List<UnitAction1> allPossibleActions,
                                          int nfolds, boolean DEBUG, boolean calibrate) throws Exception
     {
         Random r = new Random();
@@ -158,11 +157,11 @@ public class TestPretrainedBayesianModel {
             double numPossibleActionsAccum = 0;
             for(int i = 0;i<X_test.size();i++) {
                 Unit u = i_test.get(i).u;
-                List<UnitAction> possibleUnitActions = u.getUnitActions(i_test.get(i).gs);
+                List<UnitAction1> possibleUnitActions = u.getUnitActions(i_test.get(i).gs);
                 List<Integer> possibleUnitActionIndexes = new ArrayList<>();
-                for(UnitAction ua : possibleUnitActions) {
-                    if (ua.getType()==UnitAction.TYPE_ATTACK_LOCATION) {
-                        ua = new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, ua.getLocationX() - u.getX(), ua.getLocationY() - u.getY());
+                for(UnitAction1 ua : possibleUnitActions) {
+                    if (ua.getType()== UnitAction1.TYPE_ATTACK_LOCATION) {
+                        ua = new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, ua.getLocationX() - u.getX(), ua.getLocationY() - u.getY());
                     }
                     int idx = allPossibleActions.indexOf(ua);
                     if (idx<0) throw new Exception("Unknown action: " + ua);
@@ -277,22 +276,22 @@ public class TestPretrainedBayesianModel {
     
     
     
-    public static List<UnitAction> generateAllPossibleUnitActions(UnitTypeTable utt) {
-        List<UnitAction> l = new ArrayList<>();
-        int directions[] = {UnitAction.DIRECTION_UP, UnitAction.DIRECTION_RIGHT, UnitAction.DIRECTION_DOWN, UnitAction.DIRECTION_LEFT};
+    public static List<UnitAction1> generateAllPossibleUnitActions(UnitTypeTable utt) {
+        List<UnitAction1> l = new ArrayList<>();
+        int directions[] = {UnitAction1.DIRECTION_UP, UnitAction1.DIRECTION_RIGHT, UnitAction1.DIRECTION_DOWN, UnitAction1.DIRECTION_LEFT};
         
-        l.add(new UnitAction(UnitAction.TYPE_NONE, 10));
-        for(int d:directions) l.add(new UnitAction(UnitAction.TYPE_MOVE, d));
-        for(int d:directions) l.add(new UnitAction(UnitAction.TYPE_HARVEST, d));
-        for(int d:directions) l.add(new UnitAction(UnitAction.TYPE_RETURN, d));
+        l.add(new UnitAction1(UnitAction1.TYPE_NONE, 10));
+        for(int d:directions) l.add(new UnitAction1(UnitAction1.TYPE_MOVE, d));
+        for(int d:directions) l.add(new UnitAction1(UnitAction1.TYPE_HARVEST, d));
+        for(int d:directions) l.add(new UnitAction1(UnitAction1.TYPE_RETURN, d));
         for(int d:directions) {
-            for(UnitType ut:utt.getUnitTypes()) l.add(new UnitAction(UnitAction.TYPE_PRODUCE, d, ut));
+            for(UnitType ut:utt.getUnitTypes()) l.add(new UnitAction1(UnitAction1.TYPE_PRODUCE, d, ut));
         }
         for(int ox = -3;ox<=3;ox++) {
             for(int oy = -3;oy<=3;oy++) {
                 int d = (ox*ox) + (oy*oy);
                 if (d>0 && d<=9) {
-                    l.add(new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, ox, oy));
+                    l.add(new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, ox, oy));
                 }
             }            
         }

@@ -13,7 +13,6 @@ import rts.GameState;
 import rts.PhysicalGameState;
 import rts.Player;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 import rts.units.UnitTypeTable;
@@ -74,7 +73,7 @@ public class CRanged_Tactic extends AbstractAction {
         w.tag("/Attack");
     }
 
-    public UnitAction execute(GameState gs, ResourceUsage ru) {
+    public UnitAction1 execute(GameState gs, ResourceUsage ru) {
         PhysicalGameState pgs = gs.getPhysicalGameState();
 
         Unit unit = getUnit();
@@ -145,9 +144,9 @@ public class CRanged_Tactic extends AbstractAction {
 
         //Action for workers
         if (unit.getType() == workerType) {
-            UnitAction move = null;
+            UnitAction1 move = null;
             if (d <= unit.getAttackRange()) {
-                return new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, target.getX(), target.getY());
+                return new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, target.getX(), target.getY());
             } else if (timeToAttack) {
                 move = pf.findPathToPositionInRange(unit, target.getX() + target.getY() * gs.getPhysicalGameState().getWidth(), unit.getAttackRange(), gs, ru);
             } else if (ally != null) {
@@ -175,10 +174,10 @@ public class CRanged_Tactic extends AbstractAction {
 
         //Action for ranged units
         if (d <= unit.getAttackRange()) {
-            return new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, target.getX(), target.getY());
+            return new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, target.getX(), target.getY());
         } //If the unit is the ally closest to enemy base
         else if ((ally == null || ally.getID() == unit.getID())) {
-            UnitAction move = null;
+            UnitAction1 move = null;
 
             if (timeToAttack && (target.getType() == baseType)) {
                 move = pf.findPathToPositionInRange(unit, target.getX() + target.getY() * gs.getPhysicalGameState().getWidth(), unit.getAttackRange(), gs, ru);
@@ -193,16 +192,16 @@ public class CRanged_Tactic extends AbstractAction {
 
             //Attack behavior
             if (d <= (unit.getAttackRange()) - 1 && rd > 2 && unit.getMoveTime() < target.getMoveTime()) {
-                UnitAction move = pf.findPathToPositionInRange(unit, home.getX() + home.getY() * gs.getPhysicalGameState().getWidth(), getUnit().getAttackRange(), gs, ru);
+                UnitAction1 move = pf.findPathToPositionInRange(unit, home.getX() + home.getY() * gs.getPhysicalGameState().getWidth(), getUnit().getAttackRange(), gs, ru);
                 if (move != null && gs.isUnitActionAllowed(unit, move)) {
                     return move;
                 }
                 return null;
             } else if (d <= unit.getAttackRange()) {
-                return new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, target.getX(), target.getY());
+                return new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, target.getX(), target.getY());
             } else {
                 // move towards the unit:
-                UnitAction move = pf.findPathToPositionInRange(unit, target.getX() + target.getY() * gs.getPhysicalGameState().getWidth(), getUnit().getAttackRange(), gs, ru);
+                UnitAction1 move = pf.findPathToPositionInRange(unit, target.getX() + target.getY() * gs.getPhysicalGameState().getWidth(), getUnit().getAttackRange(), gs, ru);
                 if (move != null && gs.isUnitActionAllowed(unit, move)) {
                     return move;
                 }
@@ -284,7 +283,7 @@ public class CRanged_Tactic extends AbstractAction {
     }
 
     //Figures out correct move action for a square unit formation
-    public UnitAction squareMove(GameState gs, ResourceUsage ru, Unit targetUnit) {
+    public UnitAction1 squareMove(GameState gs, ResourceUsage ru, Unit targetUnit) {
         PhysicalGameState pgs = gs.getPhysicalGameState();
         Unit unit = getUnit();
         Unit ally = targetUnit;
@@ -296,15 +295,15 @@ public class CRanged_Tactic extends AbstractAction {
         Unit atDownRight = pgs.getUnitAt(ally.getX() + 1, ally.getY() + 1);
         Unit atRight = pgs.getUnitAt(ally.getX() + 1, ally.getY());
 
-        UnitAction moveToUp = pf.findPath(unit, (ally.getX()) + (ally.getY() - 1) * gs.getPhysicalGameState().getWidth(), gs, ru);
-        UnitAction moveToUpLeft = pf.findPath(unit, (ally.getX() - 1) + (ally.getY() - 1) * gs.getPhysicalGameState().getWidth(), gs, ru);
-        UnitAction moveToLeft = pf.findPath(unit, (ally.getX() - 1) + (ally.getY()) * gs.getPhysicalGameState().getWidth(), gs, ru);
-        UnitAction moveToDown = pf.findPath(unit, (ally.getX()) + (ally.getY() + 1) * gs.getPhysicalGameState().getWidth(), gs, ru);
-        UnitAction moveToDownRight = pf.findPath(unit, (ally.getX() + 1) + (ally.getY() + 1) * gs.getPhysicalGameState().getWidth(), gs, ru);
-        UnitAction moveToRight = pf.findPath(unit, (ally.getX() + 1) + (ally.getY()) * gs.getPhysicalGameState().getWidth(), gs, ru);
+        UnitAction1 moveToUp = pf.findPath(unit, (ally.getX()) + (ally.getY() - 1) * gs.getPhysicalGameState().getWidth(), gs, ru);
+        UnitAction1 moveToUpLeft = pf.findPath(unit, (ally.getX() - 1) + (ally.getY() - 1) * gs.getPhysicalGameState().getWidth(), gs, ru);
+        UnitAction1 moveToLeft = pf.findPath(unit, (ally.getX() - 1) + (ally.getY()) * gs.getPhysicalGameState().getWidth(), gs, ru);
+        UnitAction1 moveToDown = pf.findPath(unit, (ally.getX()) + (ally.getY() + 1) * gs.getPhysicalGameState().getWidth(), gs, ru);
+        UnitAction1 moveToDownRight = pf.findPath(unit, (ally.getX() + 1) + (ally.getY() + 1) * gs.getPhysicalGameState().getWidth(), gs, ru);
+        UnitAction1 moveToRight = pf.findPath(unit, (ally.getX() + 1) + (ally.getY()) * gs.getPhysicalGameState().getWidth(), gs, ru);
 
         if (distanceWithoutUnits(ally.getX(), (ally.getY() + 1), enemyBase.getX(), enemyBase.getY()) > distance(ally, enemyBase)) {
-            UnitAction move = null;
+            UnitAction1 move = null;
             if (unit == atDown || unit == atDownRight || unit == atRight) {
                 return null;
             }
@@ -321,7 +320,7 @@ public class CRanged_Tactic extends AbstractAction {
             }
             return null;
         } else {
-            UnitAction move = null;
+            UnitAction1 move = null;
 
             if (unit == atUp || unit == atUpLeft || unit == atLeft) {
                 return null;

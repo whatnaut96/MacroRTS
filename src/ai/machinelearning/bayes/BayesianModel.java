@@ -11,7 +11,6 @@ import java.util.List;
 import ai.stochastic.UnitActionProbabilityDistribution;
 import org.jdom.Element;
 import rts.GameState;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 import rts.units.UnitTypeTable;
@@ -28,7 +27,7 @@ public abstract class BayesianModel extends UnitActionProbabilityDistribution {
     
     public static final double laplaceBeta = 1.0;    
     
-    protected List<UnitAction> allPossibleActions;
+    protected List<UnitAction1> allPossibleActions;
     protected FeatureGenerator featureGenerator;
     protected String name;
     
@@ -69,7 +68,7 @@ public abstract class BayesianModel extends UnitActionProbabilityDistribution {
     }   
     
     
-    public double[] predictDistribution(Unit u, GameState gs, List<UnitAction> actions) throws Exception
+    public double[] predictDistribution(Unit u, GameState gs, List<UnitAction1> actions) throws Exception
     {
         TrainingInstance ti = new TrainingInstance(gs, u.getID(), null);
         int []x = featureGenerator.generateFeaturesAsArray(ti);        
@@ -117,15 +116,15 @@ public abstract class BayesianModel extends UnitActionProbabilityDistribution {
     }
     
     
-    public double[] filterByPossibleActions(double []d, Unit u, List<UnitAction> l) {
+    public double[] filterByPossibleActions(double []d, Unit u, List<UnitAction1> l) {
         double []filtered = new double[l.size()];
                 
         double total = 0;
         for(int i = 0;i<l.size();i++) {
-            UnitAction ua = l.get(i);
+            UnitAction1 ua = l.get(i);
             // translate the attack actions to relative coordinates:
-            if (ua.getType()==UnitAction.TYPE_ATTACK_LOCATION) {
-                ua = new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, ua.getLocationX() - u.getX(), ua.getLocationY() - u.getY());
+            if (ua.getType()== UnitAction1.TYPE_ATTACK_LOCATION) {
+                ua = new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, ua.getLocationX() - u.getX(), ua.getLocationY() - u.getY());
             }            
             int idx = allPossibleActions.indexOf(ua);
             filtered[i] = d[idx];
@@ -141,23 +140,23 @@ public abstract class BayesianModel extends UnitActionProbabilityDistribution {
     }
     
     
-    public static List<UnitAction> generateAllPossibleUnitActions(UnitTypeTable utt) {
-        List<UnitAction> l = new ArrayList<>();
+    public static List<UnitAction1> generateAllPossibleUnitActions(UnitTypeTable utt) {
+        List<UnitAction1> l = new ArrayList<>();
         int maxAttackRange = 1;
-        int directions[] = {UnitAction.DIRECTION_UP, UnitAction.DIRECTION_RIGHT, UnitAction.DIRECTION_DOWN, UnitAction.DIRECTION_LEFT};
+        int directions[] = {UnitAction1.DIRECTION_UP, UnitAction1.DIRECTION_RIGHT, UnitAction1.DIRECTION_DOWN, UnitAction1.DIRECTION_LEFT};
         
         for(UnitType ut:utt.getUnitTypes()) {
             if (ut.attackRange > maxAttackRange) maxAttackRange = ut.attackRange;
         }
         
-        l.add(new UnitAction(UnitAction.TYPE_NONE, 10));
-        for(int d:directions) l.add(new UnitAction(UnitAction.TYPE_MOVE, d));
-        for(int d:directions) l.add(new UnitAction(UnitAction.TYPE_HARVEST, d));
-        for(int d:directions) l.add(new UnitAction(UnitAction.TYPE_RETURN, d));
+        l.add(new UnitAction1(UnitAction1.TYPE_NONE, 10));
+        for(int d:directions) l.add(new UnitAction1(UnitAction1.TYPE_MOVE, d));
+        for(int d:directions) l.add(new UnitAction1(UnitAction1.TYPE_HARVEST, d));
+        for(int d:directions) l.add(new UnitAction1(UnitAction1.TYPE_RETURN, d));
         for(int d:directions) {
             for(UnitType ut:utt.getUnitTypes()) {
                 if (!ut.producedBy.isEmpty()) {
-                    l.add(new UnitAction(UnitAction.TYPE_PRODUCE, d, ut));
+                    l.add(new UnitAction1(UnitAction1.TYPE_PRODUCE, d, ut));
                 }
             }
         }
@@ -165,7 +164,7 @@ public abstract class BayesianModel extends UnitActionProbabilityDistribution {
             for(int oy = -maxAttackRange;oy<=maxAttackRange;oy++) {
                 int d = (ox*ox) + (oy*oy);
                 if (d>0 && d<=maxAttackRange*maxAttackRange) {
-                    l.add(new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, ox, oy));
+                    l.add(new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, ox, oy));
                 }
             }            
         }

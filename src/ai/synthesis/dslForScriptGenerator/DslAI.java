@@ -15,7 +15,6 @@ import ai.core.ParameterSpecification;
 import ai.synthesis.grammar.dslTree.interfacesDSL.iDSL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import rts.GameState;
@@ -23,7 +22,6 @@ import rts.PlayerAction;
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 import ai.synthesis.dslForScriptGenerator.DSLCompiler.IDSLCompiler;
-import rts.UnitAction;
 import util.Pair;
 
 /**
@@ -138,7 +136,7 @@ public class DslAI extends AI {
     }
 
     private boolean has_actions_strange(PlayerAction currentActions, int player) {
-        for (Pair<Unit, UnitAction> entry : currentActions.getActions()) {
+        for (Pair<Unit, UnitAction1> entry : currentActions.getActions()) {
             if (entry.m_a.getPlayer() != player) {
                 return true;
             }
@@ -149,7 +147,7 @@ public class DslAI extends AI {
 
     private PlayerAction filterForStrangeUnits(PlayerAction currentActions, int player) {
         PlayerAction cleanActions = new PlayerAction();
-        for (Pair<Unit, UnitAction> entry : currentActions.getActions()) {
+        for (Pair<Unit, UnitAction1> entry : currentActions.getActions()) {
             if (entry.m_a.getPlayer() == player) {
                 cleanActions.addUnitAction(entry.m_a, entry.m_b);
             }

@@ -59,7 +59,7 @@ public class RandomBiasedSingleUnitAI extends AI {
         for(Unit u:pgs.getUnits()) {
             UnitActionAssignment uaa = gs.getActionAssignment(u);
             if (uaa!=null) {
-                ResourceUsage ru = uaa.action.resourceUsage(u, pgs);
+                ResourceUsage ru = uaa.getAction().resourceUsage(u, pgs);
                 pa.getResourceUsage().merge(ru);
             }
         }
@@ -75,18 +75,18 @@ public class RandomBiasedSingleUnitAI extends AI {
         
         if (!unitsReadyForAction.isEmpty()) {
             Unit u = unitsReadyForAction.get(r.nextInt(unitsReadyForAction.size()));
-            List<UnitAction> l = u.getUnitActions(gs);
-            UnitAction none = null;
+            List<UnitAction1> l = u.getUnitActions(gs);
+            UnitAction1 none = null;
             int nActions = l.size();
             double []distribution = new double[nActions];
 
             // Implement "bias":
             int i = 0;
-            for(UnitAction a:l) {
-                if (a.getType()==UnitAction.TYPE_NONE) none = a;
-                if (a.getType()==UnitAction.TYPE_ATTACK_LOCATION ||
-                    a.getType()==UnitAction.TYPE_HARVEST ||
-                    a.getType()==UnitAction.TYPE_RETURN) {
+            for(UnitAction1 a:l) {
+                if (a.getType()== UnitAction1.TYPE_NONE) none = a;
+                if (a.getType()== UnitAction1.TYPE_ATTACK_LOCATION ||
+                    a.getType()== UnitAction1.TYPE_HARVEST ||
+                    a.getType()== UnitAction1.TYPE_RETURN) {
                     distribution[i]=BIASED_ACTION_WEIGHT;
                 } else {
                     distribution[i]=REGULAR_ACTION_WEIGHT;
@@ -95,7 +95,7 @@ public class RandomBiasedSingleUnitAI extends AI {
             }
 
             try {
-                UnitAction ua = l.get(Sampler.weighted(distribution));
+                UnitAction1 ua = l.get(Sampler.weighted(distribution));
                 if (ua.resourceUsage(u, pgs).consistentWith(pa.getResourceUsage(), gs)) {
                     ResourceUsage ru = ua.resourceUsage(u, pgs);
                     pa.getResourceUsage().merge(ru);                        

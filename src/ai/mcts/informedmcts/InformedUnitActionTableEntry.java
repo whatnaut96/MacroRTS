@@ -5,7 +5,7 @@
 package ai.mcts.informedmcts;
 
 import java.util.List;
-import rts.UnitAction;
+
 import rts.units.Unit;
 
 /**
@@ -15,13 +15,13 @@ import rts.units.Unit;
 public class InformedUnitActionTableEntry {
     public Unit u;
     public int nactions = 0;
-    public List<UnitAction> actions;
+    public List<UnitAction1> actions;
     public double[] prior_distribution;
     public double[] accum_evaluation;
     public int[] visit_count;
     
     
-    public InformedUnitActionTableEntry(Unit a_u, List<UnitAction> a_actions, double []a_prior) 
+    public InformedUnitActionTableEntry(Unit a_u, List<UnitAction1> a_actions, double []a_prior)
     {
         u = a_u;
         actions = a_actions;

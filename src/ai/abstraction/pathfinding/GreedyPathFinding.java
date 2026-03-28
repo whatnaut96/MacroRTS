@@ -7,7 +7,6 @@ package ai.abstraction.pathfinding;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 
 /**
@@ -16,7 +15,7 @@ import rts.units.Unit;
  */
 public class GreedyPathFinding extends PathFinding {
     
-    public UnitAction findPath(Unit start, int targetpos, GameState gs, ResourceUsage ru) {
+    public UnitAction1 findPath(Unit start, int targetpos, GameState gs, ResourceUsage ru) {
         PhysicalGameState pgs = gs.getPhysicalGameState();        
         int w = pgs.getWidth();
         int dx[] = { 0, 1, 0,-1};
@@ -47,12 +46,12 @@ public class GreedyPathFinding extends PathFinding {
 
         if (direction==-1) return null;
                 
-        return new UnitAction(UnitAction.TYPE_MOVE, direction);
+        return new UnitAction1(UnitAction1.TYPE_MOVE, direction);
     }    
     
 
     // In this greedy algorithm, both functions are implemented identically:
-    public UnitAction findPathToPositionInRange(Unit start, int targetpos, int range, GameState gs, ResourceUsage ru) {
+    public UnitAction1 findPathToPositionInRange(Unit start, int targetpos, int range, GameState gs, ResourceUsage ru) {
         PhysicalGameState pgs = gs.getPhysicalGameState();        
         int w = pgs.getWidth();
         int dx[] = { 0, 1, 0,-1};
@@ -86,11 +85,11 @@ public class GreedyPathFinding extends PathFinding {
 
         if (direction==-1) return null;
                 
-        return new UnitAction(UnitAction.TYPE_MOVE, direction);
+        return new UnitAction1(UnitAction1.TYPE_MOVE, direction);
     }      
     
     
-    public UnitAction findPathToAdjacentPosition(Unit start, int targetpos, GameState gs, ResourceUsage ru) {
+    public UnitAction1 findPathToAdjacentPosition(Unit start, int targetpos, GameState gs, ResourceUsage ru) {
         return findPathToPositionInRange(start, targetpos, 1, gs, ru);
     }          
     

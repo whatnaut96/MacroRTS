@@ -5,14 +5,12 @@
  */
 package ai.machinelearning.bayes;
 
-import ai.machinelearning.bayes.TrainingInstance;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import rts.UnitAction;
+
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 import util.Pair;
@@ -26,7 +24,7 @@ public class FeatureSelection {
     
     
     public static double featureSetCrossValidationAccuracy(BayesianModel model, List<int []> X_l, List<Integer> Y_l, 
-                                                           List<TrainingInstance> instances, List<UnitAction> allPossibleActions,
+                                                           List<TrainingInstance> instances, List<UnitAction1> allPossibleActions,
                                                            List<Integer> features) throws Exception {
         // TODO this list is populated, but never used
         List<int []> X_reduced_l = new ArrayList<>();
@@ -127,7 +125,7 @@ public class FeatureSelection {
     
     public static Pair<Double,Double> crossValidation(BayesianModel model, List<int []> X_l, List<Integer> Y_l, 
                                          List<TrainingInstance> instances,
-                                         List<UnitAction> allPossibleActions,
+                                         List<UnitAction1> allPossibleActions,
                                          int nfolds) throws Exception
     {
         Random r = new Random();
@@ -202,11 +200,11 @@ public class FeatureSelection {
             double numPossibleActionsAccum = 0;
             for(int i = 0;i<X_test.size();i++) {
                 Unit u = i_test.get(i).u;
-                List<UnitAction> possibleUnitActions = u.getUnitActions(i_test.get(i).gs);
+                List<UnitAction1> possibleUnitActions = u.getUnitActions(i_test.get(i).gs);
                 List<Integer> possibleUnitActionIndexes = new ArrayList<>();
-                for(UnitAction ua : possibleUnitActions) {
-                    if (ua.getType()==UnitAction.TYPE_ATTACK_LOCATION) {
-                        ua = new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, ua.getLocationX() - u.getX(), ua.getLocationY() - u.getY());
+                for(UnitAction1 ua : possibleUnitActions) {
+                    if (ua.getType()== UnitAction1.TYPE_ATTACK_LOCATION) {
+                        ua = new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, ua.getLocationX() - u.getX(), ua.getLocationY() - u.getY());
                     }
                     int idx = allPossibleActions.indexOf(ua);
                     if (idx<0) throw new Exception("Unknown action: " + ua);

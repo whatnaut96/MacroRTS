@@ -8,7 +8,6 @@ import ai.abstraction.pathfinding.PathFinding;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import util.XMLWriter;
 
@@ -48,9 +47,9 @@ public class Move extends AbstractAction {
         w.tag("/Move");
     }       
 
-    public UnitAction execute(GameState gs, ResourceUsage ru) {
+    public UnitAction1 execute(GameState gs, ResourceUsage ru) {
         PhysicalGameState pgs = gs.getPhysicalGameState();
-        UnitAction move = pf.findPath(unit, x+y*pgs.getWidth(), gs, ru);
+        UnitAction1 move = pf.findPath(unit, x+y*pgs.getWidth(), gs, ru);
 //        System.out.println("AStarAttak returns: " + move);
         if (move!=null && gs.isUnitActionAllowed(unit, move)) return move;
         return null;

@@ -8,7 +8,6 @@ import ai.core.AI;
 import ai.core.ParameterSpecification;
 import java.util.List;
 import java.util.Random;
-import ai.stochastic.UnitActionProbabilityDistribution;
 import java.util.ArrayList;
 import rts.*;
 import rts.units.Unit;
@@ -70,7 +69,7 @@ public class UnitActionProbabilityDistributionAI extends AI {
         for(Unit u:pgs.getUnits()) {
             UnitActionAssignment uaa = gs.getActionAssignment(u);
             if (uaa!=null) {
-                ResourceUsage ru = uaa.action.resourceUsage(u, pgs);
+                ResourceUsage ru = uaa.getAction().resourceUsage(u, pgs);
                 pa.getResourceUsage().merge(ru);
             }
         }
@@ -78,14 +77,14 @@ public class UnitActionProbabilityDistributionAI extends AI {
         for(Unit u:pgs.getUnits()) {
             if (u.getPlayer()==player) {
                 if (gs.getActionAssignment(u)==null) {
-                    List<UnitAction> l = u.getUnitActions(gs);
+                    List<UnitAction1> l = u.getUnitActions(gs);
                     double []distribution = model.predictDistribution(u, gs, l);
-                    UnitAction none = null;
-                    for(UnitAction ua:l) 
-                        if (ua.getType()==UnitAction.TYPE_NONE) none = ua;
+                    UnitAction1 none = null;
+                    for(UnitAction1 ua:l)
+                        if (ua.getType()== UnitAction1.TYPE_NONE) none = ua;
                     
                     try {
-                        UnitAction ua = l.get(Sampler.weighted(distribution));
+                        UnitAction1 ua = l.get(Sampler.weighted(distribution));
                         if (ua.resourceUsage(u, pgs).consistentWith(pa.getResourceUsage(), gs)) {
                             ResourceUsage ru = ua.resourceUsage(u, pgs);
                             pa.getResourceUsage().merge(ru);                        

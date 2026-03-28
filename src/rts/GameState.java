@@ -126,10 +126,10 @@ public class GameState {
      * @param u
      * @return
      */
-    public UnitAction getUnitAction(Unit u) {
+    public UnitAction1 getUnitAction(Unit u) {
         UnitActionAssignment uaa = unitActions.get(u);
         if (uaa==null) return null;
-        return uaa.action;
+        return uaa.getAction();
     }    
     
     /**
@@ -150,7 +150,7 @@ public class GameState {
             if (u.getPlayer() != -1) {
                 UnitActionAssignment uaa = unitActions.get(u);
                 if (uaa == null) return false;
-                if (uaa.action == null) return false;
+                if (uaa.getAction() == null) return false;
             }
         }
         return true;
@@ -194,13 +194,13 @@ public class GameState {
             if (u.getX()==x && u.getY()==y) return false;
         }
         for(UnitActionAssignment ua:unitActions.values()) {
-            if (ua.action.type==UnitAction.TYPE_MOVE ||
-                ua.action.type==UnitAction.TYPE_PRODUCE) {
-                Unit u = ua.unit;
-                if (ua.action.getDirection()==UnitAction.DIRECTION_UP && u.getX()==x && u.getY()==y+1) return false;
-                if (ua.action.getDirection()==UnitAction.DIRECTION_RIGHT && u.getX()==x-1 && u.getY()==y) return false;
-                if (ua.action.getDirection()==UnitAction.DIRECTION_DOWN && u.getX()==x && u.getY()==y-1) return false;
-                if (ua.action.getDirection()==UnitAction.DIRECTION_LEFT && u.getX()==x+1 && u.getY()==y) return false;
+            if (ua.getAction().type== UnitAction1.TYPE_MOVE ||
+                ua.getAction().type== UnitAction1.TYPE_PRODUCE) {
+                Unit u = ua.getUnit();
+                if (ua.getAction().getDirection()== UnitAction1.DIRECTION_UP && u.getX()==x && u.getY()==y+1) return false;
+                if (ua.getAction().getDirection()== UnitAction1.DIRECTION_RIGHT && u.getX()==x-1 && u.getY()==y) return false;
+                if (ua.getAction().getDirection()== UnitAction1.DIRECTION_DOWN && u.getX()==x && u.getY()==y-1) return false;
+                if (ua.getAction().getDirection()== UnitAction1.DIRECTION_LEFT && u.getX()==x+1 && u.getY()==y) return false;
             }
         }
         return true;
@@ -216,13 +216,13 @@ public class GameState {
     	
     	boolean free[][]=pgs.getAllFree();
         for(UnitActionAssignment ua:unitActions.values()) {
-            if (ua.action.type==UnitAction.TYPE_MOVE ||
-                ua.action.type==UnitAction.TYPE_PRODUCE) {
-                Unit u = ua.unit;
-                if (ua.action.getDirection()==UnitAction.DIRECTION_UP ) free[u.getX()][u.getY()-1]=false;
-                if (ua.action.getDirection()==UnitAction.DIRECTION_RIGHT) free[u.getX()+1][u.getY()]=false;
-                if (ua.action.getDirection()==UnitAction.DIRECTION_DOWN ) free[u.getX()][u.getY()+1]=false;
-                if (ua.action.getDirection()==UnitAction.DIRECTION_LEFT) free[u.getX()-1][u.getY()]=false;
+            if (ua.getAction().type== UnitAction1.TYPE_MOVE ||
+                ua.getAction().type== UnitAction1.TYPE_PRODUCE) {
+                Unit u = ua.getUnit();
+                if (ua.getAction().getDirection()== UnitAction1.DIRECTION_UP ) free[u.getX()][u.getY()-1]=false;
+                if (ua.getAction().getDirection()== UnitAction1.DIRECTION_RIGHT) free[u.getX()+1][u.getY()]=false;
+                if (ua.getAction().getDirection()== UnitAction1.DIRECTION_DOWN ) free[u.getX()][u.getY()+1]=false;
+                if (ua.getAction().getDirection()== UnitAction1.DIRECTION_LEFT) free[u.getX()-1][u.getY()]=false;
             }
         }
         return free;
@@ -249,7 +249,7 @@ public class GameState {
     public boolean issue(PlayerAction pa) {
         boolean returnValue = false;
         
-        for(Pair<Unit,UnitAction> p:pa.actions) {
+        for(Pair<Unit, UnitAction1> p:pa.actions) {
 //            if (p.m_a==null) {
 //                System.err.println("Issuing an action to a null unit!!!");
 //                System.exit(1);
@@ -261,9 +261,9 @@ public class GameState {
                 // check for conflicts:
                 ResourceUsage ru = p.m_b.resourceUsage(p.m_a, pgs);
                 for(UnitActionAssignment uaa:unitActions.values()) {
-                    if (!uaa.action.resourceUsage(uaa.unit, pgs).consistentWith(ru, this)) {
+                    if (!uaa.getAction().resourceUsage(uaa.getUnit(), pgs).consistentWith(ru, this)) {
                         // conflicting actions:
-                        if (uaa.time==time) {
+                        if (uaa.getTime() ==time) {
                             // The actions were issued in the same game cycle, so it's normal
                             boolean cancel_old = false;
                             boolean cancel_new = false;
@@ -285,26 +285,26 @@ public class GameState {
                                     unitCancelationCounter++;
                                     break;
                             }
-                            int duration1 = uaa.action.ETA(uaa.unit);
+                            int duration1 = uaa.getAction().ETA(uaa.getUnit());
                             int duration2 = p.m_b.ETA(p.m_a);
                             if (cancel_old) {
 //                                System.out.println("Old action canceled: " + uaa.unit.getID() + ", " + uaa.action);
-                                uaa.action = new UnitAction(UnitAction.TYPE_NONE,Math.min(duration1,duration2));
+                                uaa.setAction(new UnitAction1(UnitAction1.TYPE_NONE, Math.min(duration1, duration2)));
                             }
                             if (cancel_new) {
 //                                System.out.println("New action canceled: " + p.m_a.getID() + ", " + p.m_b);
-                                p = new Pair<>(p.m_a, new UnitAction(UnitAction.TYPE_NONE,Math.min(duration1,duration2)));
+                                p = new Pair<>(p.m_a, new UnitAction1(UnitAction1.TYPE_NONE,Math.min(duration1,duration2)));
                             }
                         } else {
                             // This is more a problem, since it means there is a bug somewhere...
                             // (probably in one of the AIs)
                             System.err.println("Inconsistent actions were executed!");
                             System.err.println(uaa);
-                            System.err.println("  Resources: " + uaa.action.resourceUsage(uaa.unit, pgs));
+                            System.err.println("  Resources: " + uaa.getAction().resourceUsage(uaa.getUnit(), pgs));
                             System.err.println(p.m_a + " assigned action " + p.m_b + " at time " + time);
                             System.err.println("  Resources: " + ru);
                             System.err.println("Player resources: " + pgs.getPlayer(0).getResources() + ", " + pgs.getPlayer(1).getResources());
-                            System.err.println("Resource Consistency: " + uaa.action.resourceUsage(uaa.unit, pgs).consistentWith(ru, this));
+                            System.err.println("Resource Consistency: " + uaa.getAction().resourceUsage(uaa.getUnit(), pgs).consistentWith(ru, this));
                             
                             try {
                                 throw new Exception("dummy");   // just to be able to print the stack trace
@@ -313,14 +313,14 @@ public class GameState {
                             }
                             
                             // only the newly issued action is cancelled, since it's the problematic one...
-                            p.m_b = new UnitAction(UnitAction.TYPE_NONE);
+                            p.m_b = new UnitAction1(UnitAction1.TYPE_NONE);
                         }
                     }
                 }
                 
                 UnitActionAssignment uaa = new UnitActionAssignment(p.m_a, p.m_b, time);
                 unitActions.put(p.m_a,uaa);
-                if (p.m_b.type!=UnitAction.TYPE_NONE) returnValue = true;
+                if (p.m_b.type!= UnitAction1.TYPE_NONE) returnValue = true;
 //                System.out.println("Issuing action " + p.m_b + " to " + p.m_a);                
 //            }
         }
@@ -338,7 +338,7 @@ public class GameState {
     public boolean issueSafe(PlayerAction pa) {
         if (!pa.integrityCheck()) throw new Error("PlayerAction inconsistent before 'issueSafe'");
         if (!integrityCheck()) throw new Error("GameState inconsistent before 'issueSafe'");
-        for(Pair<Unit,UnitAction> p:pa.actions) {
+        for(Pair<Unit, UnitAction1> p:pa.actions) {
             if (p.m_a==null) {
                 System.err.println("Issuing an action to a null unit!!!");
                 System.exit(1);
@@ -350,7 +350,7 @@ public class GameState {
                 }
                 // replace the action by a NONE action of the same duration:
                 int l = p.m_b.ETA(p.m_a);
-                p.m_b = new UnitAction(UnitAction.TYPE_NONE, l);
+                p.m_b = new UnitAction1(UnitAction1.TYPE_NONE, l);
             }
             
             // get the unit that corresponds to that action (since the state might have been cloned):
@@ -389,7 +389,7 @@ public class GameState {
                     int x = position%pgs.getWidth();
                     if (pgs.getTerrain(x, y) != PhysicalGameState.TERRAIN_NONE ||
                         pgs.getUnitAt(x, y) != null) {
-                        UnitAction new_ua = new UnitAction(UnitAction.TYPE_NONE, p.m_b.ETA(p.m_a));
+                        UnitAction1 new_ua = new UnitAction1(UnitAction1.TYPE_NONE, p.m_b.ETA(p.m_a));
                         System.err.println("Player " + p.m_a.getPlayer() + " issued an illegal move action (to "+x+","+y+") to unit "+p.m_a.getID()+" at time "+getTime()+", cancelling and replacing by " + new_ua);
                         System.err.println("    Action: " + p.m_b);
                         System.err.println("    Resources used by the action: " + r);
@@ -431,12 +431,12 @@ public class GameState {
      * @param ua
      * @return
      */
-    public boolean isUnitActionAllowed(Unit u, UnitAction ua) {
+    public boolean isUnitActionAllowed(Unit u, UnitAction1 ua) {
         PlayerAction empty = new PlayerAction();
 
-        if (ua.getType()==UnitAction.TYPE_MOVE) {
-            int x2 = u.getX() + UnitAction.DIRECTION_OFFSET_X[ua.getDirection()];
-            int y2 = u.getY() + UnitAction.DIRECTION_OFFSET_Y[ua.getDirection()];
+        if (ua.getType()== UnitAction1.TYPE_MOVE) {
+            int x2 = u.getX() + UnitAction1.DIRECTION_OFFSET_X[ua.getDirection()];
+            int y2 = u.getY() + UnitAction1.DIRECTION_OFFSET_Y[ua.getDirection()];
             if (x2<0 || y2<0 ||
                 x2>=getPhysicalGameState().getWidth() || 
                 y2>=getPhysicalGameState().getHeight() ||
@@ -448,7 +448,7 @@ public class GameState {
         for(Unit u2:pgs.getUnits()) {
             UnitActionAssignment uaa = unitActions.get(u2);
             if (uaa!=null) {
-                ResourceUsage ru = uaa.action.resourceUsage(u2, pgs);
+                ResourceUsage ru = uaa.getAction().resourceUsage(u2, pgs);
                 empty.r.merge(ru);
             }
         }
@@ -472,7 +472,7 @@ public class GameState {
         for(Unit u:pgs.getUnits()) {
             UnitActionAssignment uaa = unitActions.get(u);
             if (uaa!=null) {
-                ResourceUsage ru = uaa.action.resourceUsage(u, pgs);
+                ResourceUsage ru = uaa.getAction().resourceUsage(u, pgs);
                 empty.r.merge(ru);
             }
         }
@@ -501,7 +501,7 @@ public class GameState {
 //            if (u.getPlayer()==pID) {
                 UnitActionAssignment uaa = unitActions.get(u);
                 if (uaa!=null) {
-                    ResourceUsage ru = uaa.action.resourceUsage(u, pgs);
+                    ResourceUsage ru = uaa.getAction().resourceUsage(u, pgs);
                     empty.r.merge(ru);
                 }
 //            }
@@ -537,7 +537,7 @@ public class GameState {
         }
         
         for(UnitActionAssignment uaa:unitActions.values()) {
-            int t = uaa.time + uaa.action.ETA(uaa.unit);
+            int t = uaa.getTime() + uaa.getAction().ETA(uaa.getUnit());
             if (nextChangeTime == -1 || t < nextChangeTime) nextChangeTime = t;
         }
         
@@ -555,16 +555,16 @@ public class GameState {
         
         List<UnitActionAssignment> readyToExecute = new LinkedList<>();
         for(UnitActionAssignment uaa:unitActions.values()) {
-            if (uaa.action.ETA(uaa.unit)+uaa.time<=time) readyToExecute.add(uaa);
+            if (uaa.getAction().ETA(uaa.getUnit())+ uaa.getTime() <=time) readyToExecute.add(uaa);
         }
                 
         // execute the actions:
         for(UnitActionAssignment uaa:readyToExecute) {
-            unitActions.remove(uaa.unit);
+            unitActions.remove(uaa.getUnit());
             
 //            System.out.println("Executing action for " + u + " issued at time " + uaa.time + " with duration " + uaa.action.ETA(uaa.unit));
             
-            uaa.action.execute(uaa.unit,this);
+            uaa.getAction().execute(uaa.getUnit(),this);
         }
         
         return gameover();
@@ -579,8 +579,8 @@ public class GameState {
                 
         // execute all the actions:
         for(UnitActionAssignment uaa:readyToExecute) {
-            unitActions.remove(uaa.unit);
-            uaa.action.execute(uaa.unit,this);
+            unitActions.remove(uaa.getUnit());
+            uaa.getAction().execute(uaa.getUnit(),this);
         }
     }
     
@@ -593,7 +593,7 @@ public class GameState {
         gs.time = time;
         gs.unitCancelationCounter = unitCancelationCounter;
         for(UnitActionAssignment uaa:unitActions.values()) {
-            Unit u = uaa.unit;
+            Unit u = uaa.getUnit();
             int idx = pgs.getUnits().indexOf(u);
             if (idx==-1) {
                 System.out.println("Problematic game state:");
@@ -603,7 +603,7 @@ public class GameState {
                 throw new Error("Inconsistent game state during cloning...");
             } else {
                 Unit u2 = gs.pgs.getUnits().get(idx);
-                gs.unitActions.put(u2,new UnitActionAssignment(u2, uaa.action, uaa.time));
+                gs.unitActions.put(u2,new UnitActionAssignment(u2, uaa.getAction(), uaa.getTime()));
             }                
         }
         return gs;
@@ -655,7 +655,7 @@ public class GameState {
         for(Unit u : pgs.getUnits()) {
             UnitActionAssignment uaa = unitActions.get(u);
             if (uaa!=null) {
-                ResourceUsage ru = uaa.action.resourceUsage(u, pgs);
+                ResourceUsage ru = uaa.getAction().resourceUsage(u, pgs);
                 base_ru.merge(ru);
             }
         }
@@ -686,8 +686,8 @@ public class GameState {
                 if (uaa2!=null) return false;
             } else {
                 if (uaa2==null) return false;
-                if (uaa.time!=uaa2.time) return false;
-                if (!uaa.action.equals(uaa2.action)) return false;
+                if (uaa.getTime() != uaa2.getTime()) return false;
+                if (!uaa.getAction().equals(uaa2.getAction())) return false;
             }
         }
         
@@ -703,7 +703,7 @@ public class GameState {
     public boolean integrityCheck() {
         List<Unit> alreadyUsed = new LinkedList<>();
         for(UnitActionAssignment uaa:unitActions.values()) {
-            Unit u = uaa.unit;
+            Unit u = uaa.getUnit();
             int idx = pgs.getUnits().indexOf(u);
             if (idx==-1) {
                 System.err.println("integrityCheck: unit does not exist!");
@@ -729,7 +729,7 @@ public class GameState {
                 if (uaa==null) {
                     System.out.println(u + " : -");
                 } else {
-                    System.out.println(u + " : " + uaa.action + " at " + uaa.time);                    
+                    System.out.println(u + " : " + uaa.getAction() + " at " + uaa.getTime());
                 }
             }
             
@@ -748,7 +748,7 @@ public class GameState {
             if (ua==null) {
                 tmp.append("    ").append(u).append(" -> null (ERROR!)\n");
             } else {
-                tmp.append("    ").append(u).append(" -> ").append(ua.time).append(" ").append(ua.action).append("\n");
+                tmp.append("    ").append(u).append(" -> ").append(ua.getTime()).append(" ").append(ua.getAction()).append("\n");
             }
         }
         tmp.append(pgs);
@@ -776,8 +776,8 @@ public class GameState {
         for (Unit u : unitActions.keySet()) {
             UnitActionAssignment uaa = unitActions.get(u);
             w.tagWithAttributes("unitAction",
-                "ID=\"" + uaa.unit.getID() + "\" time=\"" + uaa.time + "\"");
-            uaa.action.toxml(w);
+                "ID=\"" + uaa.getUnit().getID() + "\" time=\"" + uaa.getTime() + "\"");
+            uaa.getAction().toxml(w);
             w.tag("/unitAction");
         }
         w.tag("/actions");
@@ -828,8 +828,8 @@ public class GameState {
             }
             first = false;
             UnitActionAssignment uaa = unitActions.get(u);
-            w.write("{\"ID\":" + uaa.unit.getID() + ", \"time\":" + uaa.time + ", \"action\":");
-            uaa.action.toJSON(w);
+            w.write("{\"ID\":" + uaa.getUnit().getID() + ", \"time\":" + uaa.getTime() + ", \"action\":");
+            uaa.getAction().toJSON(w);
             w.write("}");
         }
         w.write("]");
@@ -853,7 +853,7 @@ public class GameState {
             long ID = Long.parseLong(action_e.getAttributeValue("ID"));
             Unit u = gs.getUnit(ID);
             int time = Integer.parseInt(action_e.getAttributeValue("time"));
-            UnitAction ua = UnitAction.fromXML(action_e.getChild("UnitAction"), utt);
+            UnitAction1 ua = UnitAction1.fromXML(action_e.getChild("UnitAction"), utt);
             UnitActionAssignment uaa = new UnitActionAssignment(u, ua, time);
             gs.unitActions.put(u, uaa);
         }
@@ -906,7 +906,7 @@ public class GameState {
             long ID = uaa_o.getLong("ID", -1);
             Unit u = gs.getUnit(ID);
             int time = uaa_o.getInt("time", 0);
-            UnitAction ua = UnitAction.fromJSON(uaa_o.get("action").asObject(), utt);
+            UnitAction1 ua = UnitAction1.fromJSON(uaa_o.get("action").asObject(), utt);
             UnitActionAssignment uaa = new UnitActionAssignment(u, ua, time);
             gs.unitActions.put(u, uaa);
         }
@@ -951,7 +951,7 @@ public class GameState {
             vectorObservation[player][3][u.getY()][u.getX()] = u.getType().ID + 1;
             
             if (uaa != null) {
-                vectorObservation[player][4][u.getY()][u.getX()] = uaa.action.type;
+                vectorObservation[player][4][u.getY()][u.getX()] = uaa.getAction().type;
             } else {
                 // Commented line of code is unnecessary: already initialised to 0
             	//vectorObservation[player][4][u.getY()][u.getX()] = UnitAction.TYPE_NONE;

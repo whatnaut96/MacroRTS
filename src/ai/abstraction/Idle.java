@@ -7,7 +7,6 @@ package ai.abstraction;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import util.XMLWriter;
 
@@ -38,7 +37,7 @@ public class Idle extends AbstractAction  {
         w.tag("/Idle");
     }             
 
-    public UnitAction execute(GameState gs, ResourceUsage ru) {
+    public UnitAction1 execute(GameState gs, ResourceUsage ru) {
         PhysicalGameState pgs = gs.getPhysicalGameState();
         if (!unit.getType().canAttack) return null;
         for(Unit target:pgs.getUnits()) {
@@ -47,7 +46,7 @@ public class Idle extends AbstractAction  {
                 int dy = target.getY()-unit.getY();
                 double d = Math.sqrt(dx*dx+dy*dy);
                 if (d<=unit.getAttackRange()) {
-                    return new UnitAction(UnitAction.TYPE_ATTACK_LOCATION,target.getX(),target.getY());
+                    return new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION,target.getX(),target.getY());
                 }
             }
         }

@@ -17,7 +17,7 @@ public class PlayerActionGenerator {
     GameState gameState;
     PhysicalGameState physicalGameState;
     ResourceUsage base_ru;
-    List<Pair<Unit,List<UnitAction>>> choices;
+    List<Pair<Unit,List<UnitAction1>>> choices;
     PlayerAction lastAction;
     long size = 1;  // this will be capped at Long.MAX_VALUE;
     long generated = 0;
@@ -41,7 +41,7 @@ public class PlayerActionGenerator {
         return lastAction;
     }
     
-    public List<Pair<Unit,List<UnitAction>>> getChoices() {
+    public List<Pair<Unit,List<UnitAction1>>> getChoices() {
         return choices;
     }
         
@@ -62,7 +62,7 @@ public class PlayerActionGenerator {
 		for (Unit u : physicalGameState.getUnits()) {
 			UnitActionAssignment uaa = gameState.unitActions.get(u);
 			if (uaa != null) {
-				ResourceUsage ru = uaa.action.resourceUsage(u, physicalGameState);
+				ResourceUsage ru = uaa.getAction().resourceUsage(u, physicalGameState);
 				base_ru.merge(ru);
 			}
 		}
@@ -71,7 +71,7 @@ public class PlayerActionGenerator {
 		for (Unit u : physicalGameState.getUnits()) {
 			if (u.getPlayer() == pID) {
 				if (gameState.unitActions.get(u) == null) {
-					List<UnitAction> l = u.getUnitActions(gameState, noneDuration);
+					List<UnitAction1> l = u.getUnitActions(gameState, noneDuration);
 					choices.add(new Pair<>(u, l));
 					// make sure we don't overflow:
 					long tmp = l.size();
@@ -98,7 +98,7 @@ public class PlayerActionGenerator {
         choiceSizes = new int[choices.size()];
         currentChoice = new int[choices.size()];
         int i = 0;
-        for(Pair<Unit,List<UnitAction>> choice:choices) {
+        for(Pair<Unit,List<UnitAction1>> choice:choices) {
             choiceSizes[i] = choice.m_b.size();
             currentChoice[i] = 0;
             i++;
@@ -115,8 +115,8 @@ public class PlayerActionGenerator {
      * Shuffles the list of choices
      */
     public void randomizeOrder() {
-		for (Pair<Unit, List<UnitAction>> choice : choices) {
-            List<UnitAction> tmp = new LinkedList<>(choice.m_b);
+		for (Pair<Unit, List<UnitAction1>> choice : choices) {
+            List<UnitAction1> tmp = new LinkedList<>(choice.m_b);
 			choice.m_b.clear();
 			while (!tmp.isEmpty())
 				choice.m_b.add(tmp.remove(r.nextInt(tmp.size())));
@@ -160,10 +160,10 @@ public class PlayerActionGenerator {
 			
 			while (i > 0) {
 				i--;
-				Pair<Unit, List<UnitAction>> unitChoices = choices.get(i);
+				Pair<Unit, List<UnitAction1>> unitChoices = choices.get(i);
 				int choice = currentChoice[i];
 				Unit u = unitChoices.m_a;
-				UnitAction ua = unitChoices.m_b.get(choice);
+				UnitAction1 ua = unitChoices.m_b.get(choice);
 
 				ResourceUsage r2 = ua.resourceUsage(u, physicalGameState);
 
@@ -202,13 +202,13 @@ public class PlayerActionGenerator {
 		Random r = new Random();
 		PlayerAction pa = new PlayerAction();
 		pa.setResourceUsage(base_ru.clone());
-		for (Pair<Unit, List<UnitAction>> unitChoices : choices) {
-            List<UnitAction> l = new LinkedList<>(unitChoices.m_b);
+		for (Pair<Unit, List<UnitAction1>> unitChoices : choices) {
+            List<UnitAction1> l = new LinkedList<>(unitChoices.m_b);
 			Unit u = unitChoices.m_a;
 
 			boolean consistent = false;
 			do {
-				UnitAction ua = l.remove(r.nextInt(l.size()));
+				UnitAction1 ua = l.remove(r.nextInt(l.size()));
 				ResourceUsage r2 = ua.resourceUsage(u, physicalGameState);
 
 				if (pa.getResourceUsage().consistentWith(r2, gameState)) {
@@ -228,10 +228,10 @@ public class PlayerActionGenerator {
      */
 	public long getActionIndex(PlayerAction a) {
 		int choice[] = new int[choices.size()];
-		for (Pair<Unit, UnitAction> ua : a.actions) {
+		for (Pair<Unit, UnitAction1> ua : a.actions) {
 			int idx = 0;
-			Pair<Unit, List<UnitAction>> ua_choice = null;
-			for (Pair<Unit, List<UnitAction>> c : choices) {
+			Pair<Unit, List<UnitAction1>> ua_choice = null;
+			for (Pair<Unit, List<UnitAction1>> c : choices) {
 				if (ua.m_a == c.m_a) {
 					ua_choice = c;
 					break;
@@ -255,7 +255,7 @@ public class PlayerActionGenerator {
     
     public String toString() {
         StringBuilder ret = new StringBuilder("PlayerActionGenerator:\n");
-        for(Pair<Unit,List<UnitAction>> choice:choices) {
+        for(Pair<Unit,List<UnitAction1>> choice:choices) {
             ret.append("  (").append(choice.m_a).append(",").append(choice.m_b.size()).append(")\n");
         }
         ret.append("currentChoice: ");

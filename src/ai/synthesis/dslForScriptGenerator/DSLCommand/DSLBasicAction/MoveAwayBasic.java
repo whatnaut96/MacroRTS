@@ -10,12 +10,11 @@ import ai.abstraction.pathfinding.PathFinding;
 import ai.synthesis.dslForScriptGenerator.DSLCommand.AbstractBasicAction;
 import ai.synthesis.dslForScriptGenerator.DSLCommandInterfaces.IUnitCommand;
 import java.util.HashMap;
-import java.util.HashSet;
+
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.PlayerAction;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 
@@ -41,8 +40,8 @@ public class MoveAwayBasic extends AbstractBasicAction implements IUnitCommand {
 
             if (game.getActionAssignment(unAlly) == null && unAlly != null && targetEnemy != null) {
 
-                UnitAction uAct = null;
-                UnitAction move = pf.findPathToAdjacentPosition(unAlly, targetEnemy.getX() + targetEnemy.getY() * pgs.getWidth(), game, resources);
+                UnitAction1 uAct = null;
+                UnitAction1 move = pf.findPathToAdjacentPosition(unAlly, targetEnemy.getX() + targetEnemy.getY() * pgs.getWidth(), game, resources);
                 if (move != null && game.isUnitActionAllowed(unAlly, move));
                 uAct = move;
 
@@ -129,8 +128,8 @@ public class MoveAwayBasic extends AbstractBasicAction implements IUnitCommand {
 
         if (game.getActionAssignment(unAlly) == null && unAlly != null && targetEnemy != null && hasInPotentialUnits(game, currentPlayerAction, unAlly, player)) {
 
-            UnitAction uAct = null;
-            UnitAction move = pf.findPathToPositionInRange(unAlly, targetEnemy.getX() + targetEnemy.getY() * pgs.getWidth(), unAlly.getAttackRange(), game, resources);
+            UnitAction1 uAct = null;
+            UnitAction1 move = pf.findPathToPositionInRange(unAlly, targetEnemy.getX() + targetEnemy.getY() * pgs.getWidth(), unAlly.getAttackRange(), game, resources);
             if (move != null && game.isUnitActionAllowed(unAlly, move));
             uAct = move;
 

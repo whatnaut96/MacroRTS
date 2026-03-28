@@ -5,7 +5,7 @@
 package ai.mcts.naivemcts;
 
 import java.util.List;
-import rts.UnitAction;
+
 import rts.units.Unit;
 
 /**
@@ -15,7 +15,7 @@ import rts.units.Unit;
 public class UnitActionTableEntry {
     public Unit u;
     public int nactions = 0;
-    public List<UnitAction> actions;
+    public List<UnitAction1> actions;
     public double[] accum_evaluation;
     public int[] visit_count;
 }

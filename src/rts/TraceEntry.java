@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import org.jdom.Element;
 import rts.units.Unit;
+import rts.units.UnitAction;
 import rts.units.UnitTypeTable;
 import util.Pair;
 import util.XMLWriter;

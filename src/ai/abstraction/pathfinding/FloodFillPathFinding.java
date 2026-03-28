@@ -7,7 +7,6 @@ import java.util.HashMap;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import util.Pair;
 
@@ -35,7 +34,7 @@ public class FloodFillPathFinding extends PathFinding {
     }
 
 	@Override
-	public UnitAction findPath(Unit start, int targetpos, GameState gs, ResourceUsage ru) {
+	public UnitAction1 findPath(Unit start, int targetpos, GameState gs, ResourceUsage ru) {
 		return findPathToPositionInRange(start,targetpos,0,gs,ru);
 	}
 
@@ -95,7 +94,7 @@ public class FloodFillPathFinding extends PathFinding {
 			index++;
 		}
 	}
-	private UnitAction calculateDistances(Unit start, int targetpos, int range, GameState gs, ResourceUsage ru){
+	private UnitAction1 calculateDistances(Unit start, int targetpos, int range, GameState gs, ResourceUsage ru){
 		int x=targetpos%w;
 		int y= targetpos/w;
 		
@@ -129,7 +128,7 @@ public class FloodFillPathFinding extends PathFinding {
 			}
 		}
 	}
-	private UnitAction getAction(Unit start){
+	private UnitAction1 getAction(Unit start){
 		int x=start.getX();
 		int y=start.getY();
 		
@@ -149,13 +148,13 @@ public class FloodFillPathFinding extends PathFinding {
 		}
 		switch(index){
 			case 0:
-				return new UnitAction(UnitAction.TYPE_MOVE, UnitAction.DIRECTION_LEFT);
+				return new UnitAction1(UnitAction1.TYPE_MOVE, UnitAction1.DIRECTION_LEFT);
 			case 1:
-				return new UnitAction(UnitAction.TYPE_MOVE, UnitAction.DIRECTION_UP);
+				return new UnitAction1(UnitAction1.TYPE_MOVE, UnitAction1.DIRECTION_UP);
 			case 2:
-				return new UnitAction(UnitAction.TYPE_MOVE, UnitAction.DIRECTION_RIGHT);
+				return new UnitAction1(UnitAction1.TYPE_MOVE, UnitAction1.DIRECTION_RIGHT);
 			case 3:
-				return new UnitAction(UnitAction.TYPE_MOVE, UnitAction.DIRECTION_DOWN);
+				return new UnitAction1(UnitAction1.TYPE_MOVE, UnitAction1.DIRECTION_DOWN);
 		}
          return null;
          
@@ -165,7 +164,7 @@ public class FloodFillPathFinding extends PathFinding {
 	//this is not necessarily correct. Following the shortest path to a specific location and stopping when
 	//in range is not the same as getting the shortest path to any position in range.
 	@Override
-	public UnitAction findPathToPositionInRange(Unit start, int targetpos, int range, GameState gs, ResourceUsage ru) {
+	public UnitAction1 findPathToPositionInRange(Unit start, int targetpos, int range, GameState gs, ResourceUsage ru) {
 //		System.out.println(range);
 		PhysicalGameState pgs = gs.getPhysicalGameState();
         w = pgs.getWidth();
@@ -186,7 +185,7 @@ public class FloodFillPathFinding extends PathFinding {
 		initFree(gs,ru);
 		if(cache.containsKey(targetpos)){
 			distances=cache.get(targetpos);
-			UnitAction action=getAction(start);
+			UnitAction1 action=getAction(start);
 			if(action!=null){
 				ResourceUsage r=action.resourceUsage(start, pgs);
 				for(int pos:r.getPositionsUsed()){
@@ -211,7 +210,7 @@ public class FloodFillPathFinding extends PathFinding {
 	}
 
 	@Override
-	public UnitAction findPathToAdjacentPosition(Unit start, int targetpos, GameState gs, ResourceUsage ru) {
+	public UnitAction1 findPathToAdjacentPosition(Unit start, int targetpos, GameState gs, ResourceUsage ru) {
 		return findPathToPositionInRange(start, targetpos, 1, gs, ru);
 	}
 

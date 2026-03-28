@@ -7,7 +7,6 @@ package ai.stochastic;
 
 import java.util.List;
 import rts.GameState;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 
@@ -22,6 +21,6 @@ public abstract class UnitActionProbabilityDistribution {
         utt = a_utt;
     }
             
-    public abstract double[] predictDistribution(Unit u, GameState gs, List<UnitAction> actions) throws Exception;
+    public abstract double[] predictDistribution(Unit u, GameState gs, List<UnitAction1> actions) throws Exception;
                 
 }

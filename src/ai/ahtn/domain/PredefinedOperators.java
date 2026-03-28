@@ -13,7 +13,6 @@ import java.util.HashMap;
 import rts.GameState;
 import rts.PlayerAction;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 import util.Pair;
@@ -76,7 +75,7 @@ public class PredefinedOperators {
                                 for(Unit u:gs.getUnits()) {
                                     if (u.getPlayer()==player) {
                                         if (gs.getUnitAction(u)==null) {
-                                            pa.addUnitAction(u, new UnitAction(UnitAction.TYPE_NONE, 10));
+                                            pa.addUnitAction(u, new UnitAction1(UnitAction1.TYPE_NONE, 10));
                                         }
                                     }
                                 }
@@ -86,7 +85,7 @@ public class PredefinedOperators {
                                     if (u.getPlayer()==player) {
                                         if (pa.getAction(u)==null &&
                                             gs.getUnitAction(u)==null) {
-                                            pa.addUnitAction(u, new UnitAction(UnitAction.TYPE_NONE, 10));
+                                            pa.addUnitAction(u, new UnitAction1(UnitAction1.TYPE_NONE, 10));
                                         }
                                     }
                                 }
@@ -107,10 +106,10 @@ public class PredefinedOperators {
                             } else {
                                 if (pa==null) {
                                     pa = new PlayerAction();
-                                    pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_NONE, 10));
+                                    pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_NONE, 10));
                                     gs.issue(pa);
                                 } else {
-                                    pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_NONE, 10));
+                                    pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_NONE, 10));
                                 }
                                 state.setOperatorExecutingState(1);
                                 return false;
@@ -135,10 +134,10 @@ public class PredefinedOperators {
                                 if (u2==null) return true;
                                 if (pa==null) {
                                     pa = new PlayerAction();
-                                    pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_ATTACK_LOCATION,u2.getX(),u2.getY()));
+                                    pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION,u2.getX(),u2.getY()));
                                     gs.issue(pa);
                                 } else {
-                                    pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_ATTACK_LOCATION,u2.getX(),u2.getY()));
+                                    pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION,u2.getX(),u2.getY()));
                                 }
                                 state.setOperatorExecutingState(1);
                                 return false;
@@ -163,16 +162,16 @@ public class PredefinedOperators {
                                 if (u2==null) return true;
                                 if (pa==null) {
                                     pa = new PlayerAction();
-                                    if (u1.getX() == u2.getX()-1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_HARVEST, UnitAction.DIRECTION_RIGHT));
-                                    if (u1.getX() == u2.getX()+1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_HARVEST, UnitAction.DIRECTION_LEFT));
-                                    if (u1.getY() == u2.getY()-1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_HARVEST, UnitAction.DIRECTION_DOWN));
-                                    if (u1.getY() == u2.getY()+1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_HARVEST, UnitAction.DIRECTION_UP));
+                                    if (u1.getX() == u2.getX()-1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_RIGHT));
+                                    if (u1.getX() == u2.getX()+1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_LEFT));
+                                    if (u1.getY() == u2.getY()-1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_DOWN));
+                                    if (u1.getY() == u2.getY()+1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_UP));
                                     gs.issue(pa);
                                 } else {
-                                    if (u1.getX() == u2.getX()-1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_HARVEST, UnitAction.DIRECTION_RIGHT));
-                                    if (u1.getX() == u2.getX()+1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_HARVEST, UnitAction.DIRECTION_LEFT));
-                                    if (u1.getY() == u2.getY()-1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_HARVEST, UnitAction.DIRECTION_DOWN));
-                                    if (u1.getY() == u2.getY()+1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_HARVEST, UnitAction.DIRECTION_UP));
+                                    if (u1.getX() == u2.getX()-1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_RIGHT));
+                                    if (u1.getX() == u2.getX()+1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_LEFT));
+                                    if (u1.getY() == u2.getY()-1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_DOWN));
+                                    if (u1.getY() == u2.getY()+1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_UP));
                                 }
                                 state.setOperatorExecutingState(1);
                                 return false;
@@ -197,16 +196,16 @@ public class PredefinedOperators {
                                 if (u2==null) return true;
                                 if (pa==null) {
                                     pa = new PlayerAction();
-                                    if (u1.getX() == u2.getX()-1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_RETURN, UnitAction.DIRECTION_RIGHT));
-                                    if (u1.getX() == u2.getX()+1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_RETURN, UnitAction.DIRECTION_LEFT));
-                                    if (u1.getY() == u2.getY()-1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_RETURN, UnitAction.DIRECTION_DOWN));
-                                    if (u1.getY() == u2.getY()+1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_RETURN, UnitAction.DIRECTION_UP));
+                                    if (u1.getX() == u2.getX()-1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_RIGHT));
+                                    if (u1.getX() == u2.getX()+1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_LEFT));
+                                    if (u1.getY() == u2.getY()-1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_DOWN));
+                                    if (u1.getY() == u2.getY()+1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_UP));
                                     gs.issue(pa);
                                 } else {
-                                    if (u1.getX() == u2.getX()-1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_RETURN, UnitAction.DIRECTION_RIGHT));
-                                    if (u1.getX() == u2.getX()+1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_RETURN, UnitAction.DIRECTION_LEFT));
-                                    if (u1.getY() == u2.getY()-1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_RETURN, UnitAction.DIRECTION_DOWN));
-                                    if (u1.getY() == u2.getY()+1) pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_RETURN, UnitAction.DIRECTION_UP));
+                                    if (u1.getX() == u2.getX()-1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_RIGHT));
+                                    if (u1.getX() == u2.getX()+1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_LEFT));
+                                    if (u1.getY() == u2.getY()-1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_DOWN));
+                                    if (u1.getY() == u2.getY()+1) pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_UP));
                                 }
                                 state.setOperatorExecutingState(1);
                                 return false;
@@ -239,22 +238,22 @@ public class PredefinedOperators {
                                 UnitType ut = gs.getUnitTypeTable().getUnitType(type);
                                 ResourceUsage ru = gs.getResourceUsage();
                                 if (pa!=null) {
-                                    for(Pair<Unit, UnitAction> tmp:pa.getActions()) {
+                                    for(Pair<Unit, UnitAction1> tmp:pa.getActions()) {
                                         ru.merge(tmp.m_b.resourceUsage(tmp.m_a, gs.getPhysicalGameState()));
                                     }
                                 }
-                                int posx = u1.getX() + UnitAction.DIRECTION_OFFSET_X[direction];
-                                int posy = u1.getY() + UnitAction.DIRECTION_OFFSET_Y[direction];
+                                int posx = u1.getX() + UnitAction1.DIRECTION_OFFSET_X[direction];
+                                int posy = u1.getY() + UnitAction1.DIRECTION_OFFSET_Y[direction];
                                 if (posx>=0 && posx<gs.getPhysicalGameState().getWidth() &&
                                     posy>=0 && posy<gs.getPhysicalGameState().getHeight() &&
                                     gs.free(posx, posy) &&
                                     gs.getPlayer(u1.getPlayer()).getResources()-ru.getResourcesUsed(u1.getPlayer())>=ut.cost) {
                                     if (pa==null) {
                                         pa = new PlayerAction();
-                                        pa.addUnitAction(u1, new UnitAction(UnitAction.TYPE_PRODUCE, direction, ut));
+                                        pa.addUnitAction(u1, new UnitAction1(UnitAction1.TYPE_PRODUCE, direction, ut));
                                         gs.issue(pa);
                                     } else {
-                                        UnitAction ua = new UnitAction(UnitAction.TYPE_PRODUCE, direction, ut);
+                                        UnitAction1 ua = new UnitAction1(UnitAction1.TYPE_PRODUCE, direction, ut);
                                         ResourceUsage ru2 = ua.resourceUsage(u1, gs.getPhysicalGameState());
                                         pa.getResourceUsage().merge(ru2);
                                         pa.addUnitAction(u1, ua);
@@ -273,7 +272,7 @@ public class PredefinedOperators {
                         public boolean execute(Term t, MethodDecomposition state, GameState gs, PlayerAction pa) throws Exception {
                             ResourceUsage ru = gs.getResourceUsage();
                             if (pa!=null) {
-                                for(Pair<Unit, UnitAction> tmp:pa.getActions()) {
+                                for(Pair<Unit, UnitAction1> tmp:pa.getActions()) {
                                     ru.merge(tmp.m_b.resourceUsage(tmp.m_a, gs.getPhysicalGameState()));
                                 }
                             }
@@ -284,7 +283,7 @@ public class PredefinedOperators {
                             if (gs.getUnitAction(u1)==null) {
                                 Parameter p = t.parameters[1].resolveParameter(null, gs);
                                 int pos2 = ((IntegerConstant)p).value;
-                                UnitAction ua = pf.findPath(u1, pos2, gs, ru);
+                                UnitAction1 ua = pf.findPath(u1, pos2, gs, ru);
                                 if (ua!=null) {
                                     if (pa==null) {
                                         pa = new PlayerAction();
@@ -311,7 +310,7 @@ public class PredefinedOperators {
                         public boolean execute(Term t, MethodDecomposition state, GameState gs, PlayerAction pa) throws Exception {
                             ResourceUsage ru = gs.getResourceUsage();
                             if (pa!=null) {
-                                for(Pair<Unit, UnitAction> tmp:pa.getActions()) {
+                                for(Pair<Unit, UnitAction1> tmp:pa.getActions()) {
                                     ru.merge(tmp.m_b.resourceUsage(tmp.m_a, gs.getPhysicalGameState()));
                                 }
                             }
@@ -325,7 +324,7 @@ public class PredefinedOperators {
                                 // if u2 == null, the unit is dead, so the action is over:
                                 if (u2==null) return true;
                                 
-                                UnitAction ua = pf.findPathToPositionInRange(u1, u2.getPosition(gs.getPhysicalGameState()), u1.getType().attackRange, gs, ru);
+                                UnitAction1 ua = pf.findPathToPositionInRange(u1, u2.getPosition(gs.getPhysicalGameState()), u1.getType().attackRange, gs, ru);
                                 if (ua!=null) {
                                     if (pa==null) {
                                         pa = new PlayerAction();
@@ -352,7 +351,7 @@ public class PredefinedOperators {
                         public boolean execute(Term t, MethodDecomposition state, GameState gs, PlayerAction pa) throws Exception {
                             ResourceUsage ru = gs.getResourceUsage();
                             if (pa!=null) {
-                                for(Pair<Unit, UnitAction> tmp:pa.getActions()) {
+                                for(Pair<Unit, UnitAction1> tmp:pa.getActions()) {
                                     ru.merge(tmp.m_b.resourceUsage(tmp.m_a, gs.getPhysicalGameState()));
                                 }
                             }
@@ -365,7 +364,7 @@ public class PredefinedOperators {
                                 Unit u2 = gs.getUnit(uID2);                            
                                 // if u2 == null, the unit is dead, so the action is over:
                                 if (u2==null) return true;
-                                UnitAction ua = pf.findPathToPositionInRange(u1, u2.getPosition(gs.getPhysicalGameState()), 1, gs, ru);
+                                UnitAction1 ua = pf.findPathToPositionInRange(u1, u2.getPosition(gs.getPhysicalGameState()), 1, gs, ru);
                                 if (ua!=null) {
                                     if (pa==null) {
                                         pa = new PlayerAction();
@@ -392,7 +391,7 @@ public class PredefinedOperators {
                         public boolean execute(Term t, MethodDecomposition state, GameState gs, PlayerAction pa) throws Exception {
                             ResourceUsage ru = gs.getResourceUsage();
                             if (pa!=null) {
-                                for(Pair<Unit, UnitAction> tmp:pa.getActions()) {
+                                for(Pair<Unit, UnitAction1> tmp:pa.getActions()) {
                                     ru.merge(tmp.m_b.resourceUsage(tmp.m_a, gs.getPhysicalGameState()));
                                 }
                             }
@@ -405,7 +404,7 @@ public class PredefinedOperators {
                                 Unit u2 = gs.getUnit(uID2);
                                 // if u2 == null, the unit is dead, so the action is over:
                                 if (u2==null) return true;
-                                UnitAction ua = pf.findPathToPositionInRange(u1, u2.getPosition(gs.getPhysicalGameState()), 1, gs, ru);
+                                UnitAction1 ua = pf.findPathToPositionInRange(u1, u2.getPosition(gs.getPhysicalGameState()), 1, gs, ru);
                                 if (ua!=null) {
                                     if (pa==null) {
                                         pa = new PlayerAction();

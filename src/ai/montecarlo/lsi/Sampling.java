@@ -18,7 +18,6 @@ import rts.GameState;
 import rts.PhysicalGameState;
 import rts.PlayerAction;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.UnitActionAssignment;
 import rts.units.Unit;
 import util.Pair;
@@ -78,7 +77,7 @@ public class Sampling {
         for(Unit u:pgs.getUnits()) {
             UnitActionAssignment uaa = gameState.getUnitActions().get(u);
             if (uaa!=null) {
-                ResourceUsage ru = uaa.action.resourceUsage(u, pgs);
+                ResourceUsage ru = uaa.getAction().resourceUsage(u, pgs);
                 base_ru.merge(ru);
             }
         }
@@ -120,7 +119,7 @@ public class Sampling {
             UnitActionTableEntry ate = unitActionTable.get(idx_of_dist.m_a);
 
             int code = Sampler.weighted(distribution);
-            UnitAction ua = ate.actions.get(code);
+            UnitAction1 ua = ate.actions.get(code);
             ResourceUsage r2 = ua.resourceUsage(ate.u, pgs);
 
             if (!pa.getResourceUsage().consistentWith(r2, gameState)) {
@@ -149,7 +148,7 @@ public class Sampling {
         // reorder the actions in neighbourPA to be the same as in unitActionTable
         PlayerAction orderedPA = new PlayerAction();
         for (UnitActionTableEntry agentTableEntry : unitActionTable) {
-            for (Pair<Unit, UnitAction> pair : pa.getActions()) {
+            for (Pair<Unit, UnitAction1> pair : pa.getActions()) {
                 if (pair.m_a.equals(agentTableEntry.u)) {
                     orderedPA.addUnitAction(pair.m_a, pair.m_b);
                 }
@@ -167,7 +166,7 @@ public class Sampling {
         for(Unit u:pgs.getUnits()) {
             UnitActionAssignment uaa = gameState.getUnitActions().get(u);
             if (uaa!=null) {
-                ResourceUsage ru = uaa.action.resourceUsage(u, pgs);
+                ResourceUsage ru = uaa.getAction().resourceUsage(u, pgs);
                 base_ru.merge(ru);
             }
         }
@@ -218,7 +217,7 @@ public class Sampling {
                         }
                         else{
                             UnitActionTableEntry ate = unitActionTable.get(idxTable.get(x).m_a);
-                            UnitAction ua = ate.actions.get(idxTable.get(x).m_b.get(y));
+                            UnitAction1 ua = ate.actions.get(idxTable.get(x).m_b.get(y));
                             ResourceUsage r2 = ua.resourceUsage(ate.u, pgs);
 
                             if (!pa.getResourceUsage().consistentWith(r2, gameState)) {
@@ -254,7 +253,7 @@ public class Sampling {
         for(Unit u:pgs.getUnits()) {
             UnitActionAssignment uaa = gameState.getUnitActions().get(u);
             if (uaa!=null) {
-                ResourceUsage ru = uaa.action.resourceUsage(u, pgs);
+                ResourceUsage ru = uaa.getAction().resourceUsage(u, pgs);
                 base_ru.merge(ru);
             }
         }
@@ -265,7 +264,7 @@ public class Sampling {
         for (UnitActionTableEntry unitActionTableEntry : unitActionTable) {
             HashSet<Integer> domain = new HashSet<>();
             for (int i = 0; i < unitActionTableEntry.nactions; i++) {
-                if (unitActionTableEntry.actions.get(i).getType() != UnitAction.TYPE_NONE || includeNoops) {
+                if (unitActionTableEntry.actions.get(i).getType() != UnitAction1.TYPE_NONE || includeNoops) {
                     domain.add(i);
                 }
             }
@@ -285,7 +284,7 @@ public class Sampling {
                 int actionIndex = element.get(i);
 
                 UnitActionTableEntry unitActionTableEntry = unitActionTable.get(i);
-                UnitAction unitAction = unitActionTableEntry.actions.get(actionIndex);
+                UnitAction1 unitAction = unitActionTableEntry.actions.get(actionIndex);
                 if (!pa.consistentWith(unitAction.resourceUsage(unitActionTableEntry.u, pgs), gameState)) {
                     isValid = false;
                     break;
@@ -388,9 +387,9 @@ public class Sampling {
     }
 
     public double difference(List<UnitActionTableEntry> unitActionTable, List<double[]> distributions, PlayerAction playerAction, int agentIndex) {
-        Pair<Unit, UnitAction> ute = playerAction.getActions().get(agentIndex);
+        Pair<Unit, UnitAction1> ute = playerAction.getActions().get(agentIndex);
         int j = 0;
-        for (UnitAction ua : unitActionTable.get(agentIndex).actions) {
+        for (UnitAction1 ua : unitActionTable.get(agentIndex).actions) {
             if (ute.m_b.equals(ua)){
                 break;
             }
@@ -416,7 +415,7 @@ public class Sampling {
         public int idx;
         public Unit u;
         public int nactions = 0;
-        public List<UnitAction> actions;
+        public List<UnitAction1> actions;
         public double[] accum_evaluation;
         public int[] visit_count;
     }

@@ -8,7 +8,6 @@ import ai.abstraction.pathfinding.PathFinding;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import util.XMLWriter;
 
@@ -69,13 +68,13 @@ public class Harvest extends AbstractAction  {
         w.tag("/Harvest");
     }           
     
-    public UnitAction execute(GameState gs, ResourceUsage ru) {
+    public UnitAction1 execute(GameState gs, ResourceUsage ru) {
         PhysicalGameState pgs = gs.getPhysicalGameState();
         if (unit.getResources()==0) {
             if (target == null) return null;
             // go get resources:
 //            System.out.println("findPathToAdjacentPosition from Harvest: (" + target.getX() + "," + target.getY() + ")");
-            UnitAction move = pf.findPathToAdjacentPosition(unit, target.getX()+target.getY()*gs.getPhysicalGameState().getWidth(), gs, ru);
+            UnitAction1 move = pf.findPathToAdjacentPosition(unit, target.getX()+target.getY()*gs.getPhysicalGameState().getWidth(), gs, ru);
             if (move!=null) {
                 if (gs.isUnitActionAllowed(unit, move)) return move;
                 return null;
@@ -83,18 +82,18 @@ public class Harvest extends AbstractAction  {
 
             // harvest:
             if (target.getX() == unit.getX() &&
-                target.getY() == unit.getY()-1) return new UnitAction(UnitAction.TYPE_HARVEST,UnitAction.DIRECTION_UP);
+                target.getY() == unit.getY()-1) return new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_UP);
             if (target.getX() == unit.getX()+1 &&
-                target.getY() == unit.getY()) return new UnitAction(UnitAction.TYPE_HARVEST,UnitAction.DIRECTION_RIGHT);
+                target.getY() == unit.getY()) return new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_RIGHT);
             if (target.getX() == unit.getX() &&
-                target.getY() == unit.getY()+1) return new UnitAction(UnitAction.TYPE_HARVEST,UnitAction.DIRECTION_DOWN);
+                target.getY() == unit.getY()+1) return new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_DOWN);
             if (target.getX() == unit.getX()-1 &&
-                target.getY() == unit.getY()) return new UnitAction(UnitAction.TYPE_HARVEST,UnitAction.DIRECTION_LEFT);
+                target.getY() == unit.getY()) return new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_LEFT);
         } else {
             // return resources:
             if (base == null) return null;
 //            System.out.println("findPathToAdjacentPosition from Return: (" + target.getX() + "," + target.getY() + ")");
-            UnitAction move = pf.findPathToAdjacentPosition(unit, base.getX()+base.getY()*gs.getPhysicalGameState().getWidth(), gs, ru);
+            UnitAction1 move = pf.findPathToAdjacentPosition(unit, base.getX()+base.getY()*gs.getPhysicalGameState().getWidth(), gs, ru);
             if (move!=null) {
                 if (gs.isUnitActionAllowed(unit, move)) return move;
                 return null;
@@ -102,13 +101,13 @@ public class Harvest extends AbstractAction  {
 
             // harvest:
             if (base.getX() == unit.getX() &&
-                base.getY() == unit.getY()-1) return new UnitAction(UnitAction.TYPE_RETURN,UnitAction.DIRECTION_UP);
+                base.getY() == unit.getY()-1) return new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_UP);
             if (base.getX() == unit.getX()+1 &&
-                base.getY() == unit.getY()) return new UnitAction(UnitAction.TYPE_RETURN,UnitAction.DIRECTION_RIGHT);
+                base.getY() == unit.getY()) return new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_RIGHT);
             if (base.getX() == unit.getX() &&
-                base.getY() == unit.getY()+1) return new UnitAction(UnitAction.TYPE_RETURN,UnitAction.DIRECTION_DOWN);
+                base.getY() == unit.getY()+1) return new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_DOWN);
             if (base.getX() == unit.getX()-1 &&
-                base.getY() == unit.getY()) return new UnitAction(UnitAction.TYPE_RETURN,UnitAction.DIRECTION_LEFT);
+                base.getY() == unit.getY()) return new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_LEFT);
         }
         return null;
     }    

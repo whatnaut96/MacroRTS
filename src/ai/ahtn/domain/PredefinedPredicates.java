@@ -15,7 +15,6 @@ import java.util.List;
 import rts.GameState;
 import rts.Player;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 
@@ -493,17 +492,17 @@ public class PredefinedPredicates {
                             Parameter p = term.parameters[0];
                             if (p instanceof IntegerConstant) {
                                 int d = ((IntegerConstant)p).value;
-                                if (d==UnitAction.DIRECTION_UP ||
-                                    d==UnitAction.DIRECTION_RIGHT ||
-                                    d==UnitAction.DIRECTION_DOWN ||
-                                    d==UnitAction.DIRECTION_LEFT) {
+                                if (d== UnitAction1.DIRECTION_UP ||
+                                    d== UnitAction1.DIRECTION_RIGHT ||
+                                    d== UnitAction1.DIRECTION_DOWN ||
+                                    d== UnitAction1.DIRECTION_LEFT) {
                                     return new LinkedList<>();
                                 }
                             } else {
                                 // TODO this list is populated, but never used
                                 List<Binding> l = new LinkedList<>();
                                 if (!((Variable)p).ignore()) {
-                                    l.add(new Binding((Variable)p,new IntegerConstant(UnitAction.DIRECTION_UP)));
+                                    l.add(new Binding((Variable)p,new IntegerConstant(UnitAction1.DIRECTION_UP)));
                                 }
                             }
                             return null;
@@ -513,31 +512,31 @@ public class PredefinedPredicates {
                             Parameter p = term.parameters[0];
                             if (p instanceof IntegerConstant) {
                                 int d = ((IntegerConstant)p).value;
-                                if (d==UnitAction.DIRECTION_UP ||
-                                    d==UnitAction.DIRECTION_RIGHT ||
-                                    d==UnitAction.DIRECTION_DOWN ||
-                                    d==UnitAction.DIRECTION_LEFT) {
+                                if (d== UnitAction1.DIRECTION_UP ||
+                                    d== UnitAction1.DIRECTION_RIGHT ||
+                                    d== UnitAction1.DIRECTION_DOWN ||
+                                    d== UnitAction1.DIRECTION_LEFT) {
                                     ll.add(new LinkedList<>());
                                 }
                             } else {
                                 List<Binding> l = new LinkedList<>();
                                 if (!((Variable)p).ignore()) {
-                                    l.add(new Binding((Variable)p,new IntegerConstant(UnitAction.DIRECTION_UP)));
+                                    l.add(new Binding((Variable)p,new IntegerConstant(UnitAction1.DIRECTION_UP)));
                                 }
                                 ll.add(l);
                                 l = new LinkedList<>();
                                 if (!((Variable)p).ignore()) {
-                                    l.add(new Binding((Variable)p,new IntegerConstant(UnitAction.DIRECTION_RIGHT)));
+                                    l.add(new Binding((Variable)p,new IntegerConstant(UnitAction1.DIRECTION_RIGHT)));
                                 }
                                 ll.add(l);
                                 l = new LinkedList<>();
                                 if (!((Variable)p).ignore()) {
-                                    l.add(new Binding((Variable)p,new IntegerConstant(UnitAction.DIRECTION_DOWN)));
+                                    l.add(new Binding((Variable)p,new IntegerConstant(UnitAction1.DIRECTION_DOWN)));
                                 }
                                 ll.add(l);
                                 l = new LinkedList<>();
                                 if (!((Variable)p).ignore()) {
-                                    l.add(new Binding((Variable)p,new IntegerConstant(UnitAction.DIRECTION_LEFT)));
+                                    l.add(new Binding((Variable)p,new IntegerConstant(UnitAction1.DIRECTION_LEFT)));
                                 }
                                 ll.add(l);
                             }
@@ -579,15 +578,15 @@ public class PredefinedPredicates {
                                 Unit u1 = gs.getUnit(((IntegerConstant)p1).value);
                                 if (p2 instanceof IntegerConstant) {
                                     int d = ((IntegerConstant)p2).value;
-                                    int posx = u1.getX() + UnitAction.DIRECTION_OFFSET_X[d];
-                                    int posy = u1.getY() + UnitAction.DIRECTION_OFFSET_Y[d];
+                                    int posx = u1.getX() + UnitAction1.DIRECTION_OFFSET_X[d];
+                                    int posy = u1.getY() + UnitAction1.DIRECTION_OFFSET_Y[d];
                                     if (posx>=0 && posx<gs.getPhysicalGameState().getWidth() &&
                                         posy>=0 && posy<gs.getPhysicalGameState().getHeight() &&
                                         gs.free(posx, posy)) return new LinkedList<>();
                                 } else if (p2 instanceof Variable) {
                                     for(int d = 0;d<4;d++) {
-                                        int posx = u1.getX() + UnitAction.DIRECTION_OFFSET_X[d];
-                                        int posy = u1.getY() + UnitAction.DIRECTION_OFFSET_Y[d];
+                                        int posx = u1.getX() + UnitAction1.DIRECTION_OFFSET_X[d];
+                                        int posy = u1.getY() + UnitAction1.DIRECTION_OFFSET_Y[d];
                                         if (posx>=0 && posx<gs.getPhysicalGameState().getWidth() &&
                                             posy>=0 && posy<gs.getPhysicalGameState().getHeight() &&
                                             gs.free(posx, posy)) {
@@ -610,15 +609,15 @@ public class PredefinedPredicates {
                                 Unit u1 = gs.getUnit(((IntegerConstant)p1).value);
                                 if (p2 instanceof IntegerConstant) {
                                     int d = ((IntegerConstant)p2).value;
-                                    int posx = u1.getX() + UnitAction.DIRECTION_OFFSET_X[d];
-                                    int posy = u1.getY() + UnitAction.DIRECTION_OFFSET_Y[d];
+                                    int posx = u1.getX() + UnitAction1.DIRECTION_OFFSET_X[d];
+                                    int posy = u1.getY() + UnitAction1.DIRECTION_OFFSET_Y[d];
                                     if (posx>=0 && posx<gs.getPhysicalGameState().getWidth() &&
                                         posy>=0 && posy<gs.getPhysicalGameState().getHeight() &&
                                         gs.free(posx, posy)) ll.add(new LinkedList<>());
                                 } else if (p2 instanceof Variable) {
                                     for(int d = 0;d<4;d++) {
-                                        int posx = u1.getX() + UnitAction.DIRECTION_OFFSET_X[d];
-                                        int posy = u1.getY() + UnitAction.DIRECTION_OFFSET_Y[d];
+                                        int posx = u1.getX() + UnitAction1.DIRECTION_OFFSET_X[d];
+                                        int posy = u1.getY() + UnitAction1.DIRECTION_OFFSET_Y[d];
                                         if (posx>=0 && posx<gs.getPhysicalGameState().getWidth() &&
                                             posy>=0 && posy<gs.getPhysicalGameState().getHeight() &&
                                             gs.free(posx, posy)) {

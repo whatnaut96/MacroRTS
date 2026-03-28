@@ -18,7 +18,6 @@ import rts.GameState;
 import rts.PhysicalGameState;
 import rts.PlayerAction;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 
@@ -58,7 +57,7 @@ public class HarvestBasic extends AbstractBasicAction implements IUnitCommand {
                         && closestBase != null && closestResource != null) {
 
                     AbstractAction action = new Harvest(unit, closestResource, closestBase, pf);
-                    UnitAction uAct = action.execute(game, resources);
+                    UnitAction1 uAct = action.execute(game, resources);
                     if (uAct != null) {                        
                         setHasDSLUsed();
                         if (counterByFunction.containsKey(unit.getID())) {
@@ -238,7 +237,7 @@ public class HarvestBasic extends AbstractBasicAction implements IUnitCommand {
                             && closestBase != null && closestResource != null) {
 
                         AbstractAction action = new Harvest(unit, closestResource, closestBase, pf);
-                        UnitAction uAct = action.execute(game, resources);
+                        UnitAction1 uAct = action.execute(game, resources);
                         if (uAct != null) {                            
                             setHasDSLUsed();
                             if (counterByFunction.containsKey(unit.getID())) {

@@ -15,7 +15,6 @@ import javax.swing.JPopupMenu;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.PlayerAction;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 import rts.units.UnitTypeTable;
@@ -143,8 +142,8 @@ public class PopUpStateEditorMenu extends JPopupMenu {
             }
             if (gs.getUnitAction(u)==null) {
                 if (u.getPlayer()!=-1) {
-                    List<UnitAction> actions = u.getUnitActions(gs, 10);
-                    for(UnitAction ua:actions) {
+                    List<UnitAction1> actions = u.getUnitActions(gs, 10);
+                    for(UnitAction1 ua:actions) {
                         JMenuItem i2 = new JMenuItem(ua.toString());
                         i2.addActionListener(new ActionListener() {
                              public void actionPerformed(ActionEvent event) {

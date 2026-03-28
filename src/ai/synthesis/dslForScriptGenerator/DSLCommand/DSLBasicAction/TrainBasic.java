@@ -24,11 +24,11 @@ import java.util.List;
 import rts.GameState;
 import rts.Player;
 import rts.PlayerAction;
-import rts.UnitAction;
-import static rts.UnitAction.DIRECTION_DOWN;
-import static rts.UnitAction.DIRECTION_LEFT;
-import static rts.UnitAction.DIRECTION_RIGHT;
-import static rts.UnitAction.DIRECTION_UP;
+
+import static rts.UnitAction1.DIRECTION_DOWN;
+import static rts.UnitAction1.DIRECTION_LEFT;
+import static rts.UnitAction1.DIRECTION_RIGHT;
+import static rts.UnitAction1.DIRECTION_UP;
 import rts.units.Unit;
 import rts.units.UnitType;
 import rts.units.UnitTypeTable;
@@ -52,7 +52,7 @@ public class TrainBasic extends AbstractBasicAction {
             //produce the type of unit in param
             for (Unit unit : unitToBuild) {
             	 if (game.getActionAssignment(unit) == null && currentPlayerAction.getAction(unit) == null) {
-                    UnitAction unTemp = translateUnitAction(game, a_utt, unit, p);
+                    UnitAction1 unTemp = translateUnitAction(game, a_utt, unit, p);
                     if (unTemp != null) {                    	
                         setHasDSLUsed();
                     	if(counterByFunction.containsKey(unit.getID()))
@@ -99,7 +99,7 @@ public class TrainBasic extends AbstractBasicAction {
         return false;
     }
 
-    private UnitAction translateUnitAction(GameState game, UnitTypeTable a_utt, Unit unit, Player p) {
+    private UnitAction1 translateUnitAction(GameState game, UnitTypeTable a_utt, Unit unit, Player p) {
         List<UnitTypeParam> types = getTypeUnitFromParam();
 
         for (UnitTypeParam type : types) {
@@ -108,7 +108,7 @@ public class TrainBasic extends AbstractBasicAction {
             	if(p.getResources() >= a_utt.getUnitType(en.code()).cost)
             	{
             		
-            		UnitAction uAct = null;
+            		UnitAction1 uAct = null;
             		//train based in PriorityPosition
             		uAct = trainUnitBasedInPriorityPosition(game, unit, a_utt.getUnitType(en.code()));
             		if (uAct == null) {
@@ -163,7 +163,7 @@ public class TrainBasic extends AbstractBasicAction {
             }
         }
         // count units in currentPlayerAction 
-        for (Pair<Unit, UnitAction> action : currentPlayerAction.getActions()) {
+        for (Pair<Unit, UnitAction1> action : currentPlayerAction.getActions()) {
             if ((action.m_b.getUnitType() != null)) {
                 if (action.m_b.getUnitType().ID == type.code()) {
                     qtt++;
@@ -174,19 +174,19 @@ public class TrainBasic extends AbstractBasicAction {
         return qtt;
     }
 
-    private UnitAction trainUnitBasedInPriorityPosition(GameState game, Unit unit, UnitType unitType) {
+    private UnitAction1 trainUnitBasedInPriorityPosition(GameState game, Unit unit, UnitType unitType) {
         PriorityPositionParam order = getPriorityParam();
-        UnitAction ua = null;
+        UnitAction1 ua = null;
         for (EnumPositionType enumPositionType : order.getSelectedPosition()) {
             if (enumPositionType.code() == 4) {
                 for (int enumCodePosition : getDirectionByEnemy(game, unit)) {
-                    ua = new UnitAction(UnitAction.TYPE_PRODUCE, enumCodePosition, unitType);
+                    ua = new UnitAction1(UnitAction1.TYPE_PRODUCE, enumCodePosition, unitType);
                     if (game.isUnitActionAllowed(unit, ua) && isPositionFree(game, ua, unit)) {
                         return ua;
                     }
                 }
             } else {
-                ua = new UnitAction(UnitAction.TYPE_PRODUCE, enumPositionType.code(), unitType);
+                ua = new UnitAction1(UnitAction1.TYPE_PRODUCE, enumPositionType.code(), unitType);
             }
             if (game.isUnitActionAllowed(unit, ua) && isPositionFree(game, ua, unit)) {
                 return ua;
@@ -256,7 +256,7 @@ public class TrainBasic extends AbstractBasicAction {
         return null;
     }
 
-    private boolean isPositionFree(GameState game, UnitAction ua, Unit trainUnit) {
+    private boolean isPositionFree(GameState game, UnitAction1 ua, Unit trainUnit) {
         int x, y;
         x = trainUnit.getX();
         y = trainUnit.getY();

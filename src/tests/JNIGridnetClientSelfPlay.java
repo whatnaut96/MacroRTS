@@ -20,7 +20,6 @@ import rts.PartiallyObservableGameState;
 import rts.PhysicalGameState;
 import rts.PlayerAction;
 import rts.TraceEntry;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 
@@ -202,7 +201,7 @@ public class JNIGridnetClientSelfPlay {
         for (Unit u: pgs.getUnits()) {
             if (u.getPlayer() == player && gs.getActionAssignment(u) == null) {
                 masks[player][u.getY()][u.getX()][0] = 1;
-                UnitAction.getValidActionArray(u, gs, utt, masks[player][u.getY()][u.getX()], maxAttackRadius, 1);
+                UnitAction1.getValidActionArray(u, gs, utt, masks[player][u.getY()][u.getX()], maxAttackRadius, 1);
             }
         }
         return masks[player];

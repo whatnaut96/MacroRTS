@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.jdom.Element;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 import util.XMLWriter;
@@ -91,11 +90,11 @@ public class CalibratedNaiveBayes extends BayesianModel {
             double loglikelihood = 0;
             for(int i = 0;i<x_l.size();i++) {
                 Unit u = i_l.get(i).u;
-                List<UnitAction> possibleUnitActions = u.getUnitActions(i_l.get(i).gs);
+                List<UnitAction1> possibleUnitActions = u.getUnitActions(i_l.get(i).gs);
                 List<Integer> possibleUnitActionIndexes = new ArrayList<>();
-                for(UnitAction ua : possibleUnitActions) {
-                    if (ua.getType()==UnitAction.TYPE_ATTACK_LOCATION) {
-                        ua = new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, ua.getLocationX() - u.getX(), ua.getLocationY() - u.getY());
+                for(UnitAction1 ua : possibleUnitActions) {
+                    if (ua.getType()== UnitAction1.TYPE_ATTACK_LOCATION) {
+                        ua = new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, ua.getLocationX() - u.getX(), ua.getLocationY() - u.getY());
                     }
                     int idx = allPossibleActions.indexOf(ua);
                     if (idx<0) throw new Exception("Unknown action: " + ua);

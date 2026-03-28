@@ -10,12 +10,11 @@ import ai.synthesis.dslForScriptGenerator.DSLCommand.AbstractBasicAction;
 import ai.synthesis.dslForScriptGenerator.DSLCommandInterfaces.IUnitCommand;
 import ai.abstraction.pathfinding.PathFinding;
 import java.util.HashMap;
-import java.util.HashSet;
+
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.PlayerAction;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 
@@ -44,8 +43,8 @@ public class MoveToCoordinatesBasic extends AbstractBasicAction implements IUnit
             //pick the positions
             if (game.getActionAssignment(unAlly) == null && unAlly != null) {
 
-                UnitAction uAct = null;
-                UnitAction move = pf.findPath(unAlly, pX + pY * pgs.getWidth(), game, resources);
+                UnitAction1 uAct = null;
+                UnitAction1 move = pf.findPath(unAlly, pX + pY * pgs.getWidth(), game, resources);
                 if (move == null) {
                     move = pf.findPathToAdjacentPosition(unAlly, pX + pY * pgs.getWidth(), game, resources);
                 }
@@ -114,8 +113,8 @@ public class MoveToCoordinatesBasic extends AbstractBasicAction implements IUnit
 
         if (game.getActionAssignment(unAlly) == null && unAlly != null && hasInPotentialUnits(game, currentPlayerAction, unAlly, player)) {
 
-            UnitAction uAct = null;
-            UnitAction move = pf.findPathToAdjacentPosition(unAlly, pX + pY * pgs.getWidth(), game, resources);
+            UnitAction1 uAct = null;
+            UnitAction1 move = pf.findPathToAdjacentPosition(unAlly, pX + pY * pgs.getWidth(), game, resources);
             if (move != null && game.isUnitActionAllowed(unAlly, move));
             uAct = move;
 

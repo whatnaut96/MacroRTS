@@ -12,8 +12,6 @@ import ai.synthesis.dslForScriptGenerator.IDSLParameters.IPriorityPosition;
 import ai.synthesis.dslForScriptGenerator.IDSLParameters.IQuantity;
 import ai.synthesis.dslForScriptGenerator.DSLParametersConcrete.ConstructionTypeParam;
 import ai.synthesis.dslForScriptGenerator.DSLParametersConcrete.PriorityPositionParam;
-import ai.abstraction.AbstractAction;
-import ai.abstraction.Build;
 import ai.abstraction.pathfinding.PathFinding;
 import ai.synthesis.dslForScriptGenerator.DSLCommand.AbstractBasicAction;
 import ai.synthesis.dslForScriptGenerator.DSLCommandInterfaces.IUnitCommand;
@@ -26,12 +24,11 @@ import rts.GameState;
 import rts.PhysicalGameState;
 import rts.Player;
 import rts.PlayerAction;
-import rts.ResourceUsage;
-import rts.UnitAction;
-import static rts.UnitAction.DIRECTION_DOWN;
-import static rts.UnitAction.DIRECTION_LEFT;
-import static rts.UnitAction.DIRECTION_RIGHT;
-import static rts.UnitAction.DIRECTION_UP;
+
+import static rts.UnitAction1.DIRECTION_DOWN;
+import static rts.UnitAction1.DIRECTION_LEFT;
+import static rts.UnitAction1.DIRECTION_RIGHT;
+import static rts.UnitAction1.DIRECTION_UP;
 import rts.units.Unit;
 import rts.units.UnitType;
 import rts.units.UnitTypeTable;
@@ -58,7 +55,7 @@ public class BuildBasic extends AbstractBasicAction implements IUnitCommand {
                     Unit workToBuild = getWorkToBuild(player, game, currentPlayerAction, a_utt, pf);
                     if (workToBuild != null) {
                         //execute the build action
-                        UnitAction unAcTemp = translateUnitAction(game, a_utt, workToBuild, currentPlayerAction, player, pf);
+                        UnitAction1 unAcTemp = translateUnitAction(game, a_utt, workToBuild, currentPlayerAction, player, pf);
                         if (unAcTemp != null) {
                             setHasDSLUsed();
                             if (counterByFunction.containsKey(workToBuild.getID())) {
@@ -100,7 +97,7 @@ public class BuildBasic extends AbstractBasicAction implements IUnitCommand {
         }
     }
 
-    private UnitAction translateUnitAction(GameState game, UnitTypeTable a_utt, Unit unit, PlayerAction currentPlayerAction, int player, PathFinding pf) {
+    private UnitAction1 translateUnitAction(GameState game, UnitTypeTable a_utt, Unit unit, PlayerAction currentPlayerAction, int player, PathFinding pf) {
         List<Integer> reservedPositions = new LinkedList<>();
         reservedPositions.addAll(game.getResourceUsage().getPositionsUsed());
         reservedPositions.addAll(currentPlayerAction.getResourceUsage().getPositionsUsed());
@@ -108,22 +105,22 @@ public class BuildBasic extends AbstractBasicAction implements IUnitCommand {
         return buildConsideringPosition(player, reservedPositions, pgs, a_utt, unit, currentPlayerAction, game, pf);
     }
 
-    private UnitAction buildConsideringPosition(int player, List<Integer> reservedPositions, PhysicalGameState pgs, UnitTypeTable a_utt, Unit unit, PlayerAction currentPlayerAction, GameState game, PathFinding pf) {
+    private UnitAction1 buildConsideringPosition(int player, List<Integer> reservedPositions, PhysicalGameState pgs, UnitTypeTable a_utt, Unit unit, PlayerAction currentPlayerAction, GameState game, PathFinding pf) {
         PriorityPositionParam order = getPriorityParam();
-        UnitAction ua = null;
+        UnitAction1 ua = null;
         //pick the type to be builded
         UnitType unitType = getUnitTyppe(a_utt);
 
         for (EnumPositionType enumPositionType : order.getSelectedPosition()) {
             if (enumPositionType.code() == 4) {
                 for (int enumCodePosition : getDirectionByEnemy(game, unit)) {
-                    ua = new UnitAction(UnitAction.TYPE_PRODUCE, enumCodePosition, unitType);
+                    ua = new UnitAction1(UnitAction1.TYPE_PRODUCE, enumCodePosition, unitType);
                     if (game.isUnitActionAllowed(unit, ua) && isPositionFree(game, ua, unit)) {
                         return ua;
                     }
                 }
             } else {
-                ua = new UnitAction(UnitAction.TYPE_PRODUCE, enumPositionType.code(), unitType);
+                ua = new UnitAction1(UnitAction1.TYPE_PRODUCE, enumPositionType.code(), unitType);
             }
             if (game.isUnitActionAllowed(unit, ua) && isPositionFree(game, ua, unit)) {
                 return ua;
@@ -220,7 +217,7 @@ public class BuildBasic extends AbstractBasicAction implements IUnitCommand {
             }
         }
         // count units in currentPlayerAction 
-        for (Pair<Unit, UnitAction> action : currentPlayerAction.getActions()) {
+        for (Pair<Unit, UnitAction1> action : currentPlayerAction.getActions()) {
             if (action.m_a.getType().ID == type.code()) {
                 qtt++;
             }
@@ -238,7 +235,7 @@ public class BuildBasic extends AbstractBasicAction implements IUnitCommand {
         return null;
     }
 
-    private boolean isPositionFree(GameState game, UnitAction ua, Unit trainUnit) {
+    private boolean isPositionFree(GameState game, UnitAction1 ua, Unit trainUnit) {
         int x, y;
         x = trainUnit.getX();
         y = trainUnit.getY();
@@ -428,7 +425,7 @@ public class BuildBasic extends AbstractBasicAction implements IUnitCommand {
                     //Unit workToBuild = getWorkToBuild(player, game, currentPlayerAction, a_utt);
                     if (workToBuild != null && hasInPotentialUnitsWorkers(game, currentPlayerAction, workToBuild, player, a_utt, pf)) {
                         //execute the build action                    	
-                        UnitAction unAcTemp = translateUnitAction(game, a_utt, workToBuild, currentPlayerAction, player, pf);
+                        UnitAction1 unAcTemp = translateUnitAction(game, a_utt, workToBuild, currentPlayerAction, player, pf);
                         if (unAcTemp != null) {                            
                             setHasDSLUsed();
                             if (counterByFunction.containsKey(workToBuild.getID())) {

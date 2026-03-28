@@ -11,7 +11,6 @@ import java.util.List;
 import rts.GameState;
 import rts.PartiallyObservableGameState;
 import rts.PlayerAction;
-import rts.UnitAction;
 import rts.UnitActionAssignment;
 import rts.units.Unit;
 import rts.units.UnitType;
@@ -229,13 +228,13 @@ public class BS3_NaiveMCTS extends NaiveMCTS implements AIWithBelieveState {
             if (u.getPlayer() == opponent && gs.free(u.getX(), u.getY())) {
                 // check for enemy units that moved into the fog-of-war
                 UnitActionAssignment uaa = lastObservedGame.getActionAssignment(u);
-                if (uaa != null && uaa.action.getType() == UnitAction.TYPE_MOVE) {
+                if (uaa != null && uaa.getAction().getType() == UnitAction1.TYPE_MOVE) {
                     int offsx = 0;
                     int offsy = 0;
-                    if (uaa.action.getDirection() == UnitAction.DIRECTION_UP) offsy = -1;
-                    if (uaa.action.getDirection() == UnitAction.DIRECTION_RIGHT) offsx = 1;
-                    if (uaa.action.getDirection() == UnitAction.DIRECTION_DOWN) offsy = 1;
-                    if (uaa.action.getDirection() == UnitAction.DIRECTION_LEFT) offsx = -1;
+                    if (uaa.getAction().getDirection() == UnitAction1.DIRECTION_UP) offsy = -1;
+                    if (uaa.getAction().getDirection() == UnitAction1.DIRECTION_RIGHT) offsx = 1;
+                    if (uaa.getAction().getDirection() == UnitAction1.DIRECTION_DOWN) offsy = 1;
+                    if (uaa.getAction().getDirection() == UnitAction1.DIRECTION_LEFT) offsx = -1;
                     if (!gs.observable(u.getX() + offsx, u.getY() + offsy)) {
 //                        System.out.println("Enemy moved to fog of war!" + u.toString());
                         lastKnownPosition.add(u.clone());
@@ -308,13 +307,13 @@ public class BS3_NaiveMCTS extends NaiveMCTS implements AIWithBelieveState {
                 // sometimes a visible unit start to move or produce a unit on top of a believe unit
                 // for those cases we need to relocate the believe unit
                 UnitActionAssignment uaa = gs.getActionAssignment(u);
-                if (uaa != null && (uaa.action.getType() == UnitAction.TYPE_MOVE || uaa.action.getType() == UnitAction.TYPE_PRODUCE)) {
+                if (uaa != null && (uaa.getAction().getType() == UnitAction1.TYPE_MOVE || uaa.getAction().getType() == UnitAction1.TYPE_PRODUCE)) {
                     int offsx = u.getX();
                     int offsy = u.getY();
-                    if (uaa.action.getDirection() == UnitAction.DIRECTION_UP) offsy -= 1;
-                    if (uaa.action.getDirection() == UnitAction.DIRECTION_RIGHT) offsx += 1;
-                    if (uaa.action.getDirection() == UnitAction.DIRECTION_DOWN) offsy += 1;
-                    if (uaa.action.getDirection() == UnitAction.DIRECTION_LEFT) offsx -= 1;
+                    if (uaa.getAction().getDirection() == UnitAction1.DIRECTION_UP) offsy -= 1;
+                    if (uaa.getAction().getDirection() == UnitAction1.DIRECTION_RIGHT) offsx += 1;
+                    if (uaa.getAction().getDirection() == UnitAction1.DIRECTION_DOWN) offsy += 1;
+                    if (uaa.getAction().getDirection() == UnitAction1.DIRECTION_LEFT) offsx -= 1;
                     for (Unit bu : lastKnownPosition) {
                         if (bu.getX() == offsx && bu.getY() == offsy) {
 //                            System.out.println("Updating conflict with move/produce");
@@ -344,13 +343,13 @@ public class BS3_NaiveMCTS extends NaiveMCTS implements AIWithBelieveState {
         for (Unit u : lastObservedGame.getUnits()) {
             if (u.getPlayer() == opponent) {
                 UnitActionAssignment uaa = lastObservedGame.getActionAssignment(u);
-                if (uaa != null && uaa.action.getType() == UnitAction.TYPE_MOVE) {
+                if (uaa != null && uaa.getAction().getType() == UnitAction1.TYPE_MOVE) {
                     int offsx = 0;
                     int offsy = 0;
-                    if (uaa.action.getDirection() == UnitAction.DIRECTION_UP) offsy = -1;
-                    if (uaa.action.getDirection() == UnitAction.DIRECTION_RIGHT) offsx = 1;
-                    if (uaa.action.getDirection() == UnitAction.DIRECTION_DOWN) offsy = 1;
-                    if (uaa.action.getDirection() == UnitAction.DIRECTION_LEFT) offsx = -1;
+                    if (uaa.getAction().getDirection() == UnitAction1.DIRECTION_UP) offsy = -1;
+                    if (uaa.getAction().getDirection() == UnitAction1.DIRECTION_RIGHT) offsx = 1;
+                    if (uaa.getAction().getDirection() == UnitAction1.DIRECTION_DOWN) offsy = 1;
+                    if (uaa.getAction().getDirection() == UnitAction1.DIRECTION_LEFT) offsx = -1;
                     if ((u.getX() + offsx) == x && (u.getY() + offsy) == y) return true;
                 }
             }
@@ -361,8 +360,8 @@ public class BS3_NaiveMCTS extends NaiveMCTS implements AIWithBelieveState {
     public boolean wasUnderAttack(Unit u) {
 
         for (UnitActionAssignment ua : lastObservedGame.getUnitActions().values()) {
-            if (ua.action.getType() == UnitAction.TYPE_ATTACK_LOCATION
-                    && ua.action.getLocationX() == u.getX() && ua.action.getLocationY() == u.getY()) {
+            if (ua.getAction().getType() == UnitAction1.TYPE_ATTACK_LOCATION
+                    && ua.getAction().getLocationX() == u.getX() && ua.getAction().getLocationY() == u.getY()) {
                 return true;
             }
         }

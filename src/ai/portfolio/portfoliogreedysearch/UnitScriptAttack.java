@@ -9,7 +9,6 @@ import ai.abstraction.AbstractAction;
 import ai.abstraction.Attack;
 import ai.abstraction.pathfinding.PathFinding;
 import rts.GameState;
-import rts.UnitAction;
 import rts.units.Unit;
 
 /**
@@ -25,7 +24,7 @@ public class UnitScriptAttack extends UnitScript {
         pf = a_pf;
     }
     
-    public UnitAction getAction(Unit u, GameState gs) {
+    public UnitAction1 getAction(Unit u, GameState gs) {
         if (action.completed(gs)) {
             return null;
         } else {

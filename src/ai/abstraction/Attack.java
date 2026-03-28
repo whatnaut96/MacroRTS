@@ -8,7 +8,6 @@ import ai.abstraction.pathfinding.PathFinding;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import util.XMLWriter;
 
@@ -48,17 +47,17 @@ public class Attack extends AbstractAction  {
     }
     
 
-    public UnitAction execute(GameState gs, ResourceUsage ru) {
+    public UnitAction1 execute(GameState gs, ResourceUsage ru) {
         
         int dx = target.getX()-unit.getX();
         int dy = target.getY()-unit.getY();
         double d = Math.sqrt(dx*dx+dy*dy);
         if (d<=unit.getAttackRange()) {
-            return new UnitAction(UnitAction.TYPE_ATTACK_LOCATION,target.getX(),target.getY());
+            return new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION,target.getX(),target.getY());
         } else {
             // move towards the unit:
     //        System.out.println("AStarAttak returns: " + move);
-            UnitAction move = pf.findPathToPositionInRange(unit, target.getX()+target.getY()*gs.getPhysicalGameState().getWidth(), unit.getAttackRange(), gs, ru);
+            UnitAction1 move = pf.findPathToPositionInRange(unit, target.getX()+target.getY()*gs.getPhysicalGameState().getWidth(), unit.getAttackRange(), gs, ru);
             if (move!=null && gs.isUnitActionAllowed(unit, move)) return move;
             return null;
         }        

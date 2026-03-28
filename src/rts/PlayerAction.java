@@ -12,25 +12,18 @@ import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 
+import rts.units.ActionType;
 import rts.units.Unit;
+import rts.units.UnitAction;
 import rts.units.UnitTypeTable;
 import util.Pair;
 import util.XMLWriter;
 
-/**
- * Stores a collection of pairs({@link Unit}, {@link UnitAction})
- * @author santi
- */
+
 public class PlayerAction {
-    /**
-     * A list of unit actions
-     */
-    List<Pair<Unit,UnitAction>> actions = new LinkedList<>();
-    
-    /**
-     * Represents the resources used by the player action
-     * TODO rename the field
-     */
+
+    List<Pair<Unit, UnitAction>> actions = new LinkedList<>();
+
     ResourceUsage r = new ResourceUsage();
     
     /**
@@ -48,8 +41,8 @@ public class PlayerAction {
         if (!(o instanceof PlayerAction)) return false;
         PlayerAction a = (PlayerAction)o;
 
-        for(Pair<Unit,UnitAction> p:actions) {
-            for(Pair<Unit,UnitAction> p2:a.actions) {
+        for(Pair<Unit, UnitAction> p:actions) {
+            for(Pair<Unit, UnitAction> p2:a.actions) {
                 if (p.m_a.getID()==p2.m_a.getID() &&
                     !p.m_b.equals(p2.m_b)) return false;
             }
@@ -62,36 +55,25 @@ public class PlayerAction {
         return Objects.hash(actions, r);  // whatever fields equals() compares
     }
     
-    /**
-     * Returns whether there are no player actions
-     * @return
-     */
+
     public boolean isEmpty() {
         return actions.isEmpty();
     }
 
-    /**
-     * Returns whether the player has assigned any action different 
-     * than {@link UnitAction#TYPE_NONE} to any of its units 
-     * @return
-     */
+
     public boolean hasNonNoneActions() {
 		for (Pair<Unit, UnitAction> ua : actions) {
-			if (ua.m_b.type != UnitAction.TYPE_NONE)
+			if (ua.m_b.getActionType() != ActionType.NONE)
 				return true;
 		}
 		return false;
     }
         
-    /**
-     * Returns the number of actions different than 
-     * {@link UnitAction#TYPE_NONE}
-     * @return
-     */
+
     public int hasNamNoneActions() {
 		int j = 0;
 		for (Pair<Unit, UnitAction> ua : actions) {
-			if (ua.m_b.type != UnitAction.TYPE_NONE)
+			if (ua.m_b.getActionType() != ActionType.NONE)
 				j++;
 		}
 		return j;
@@ -105,20 +87,12 @@ public class PlayerAction {
     public ResourceUsage getResourceUsage() {
         return r;
     }
-    
-    /**
-     * Sets the resource usage
-     * @param a_r
-     */
+
     public void setResourceUsage(ResourceUsage a_r) {
         r = a_r;
     }
     
-    /**
-     * Adds a new {@link UnitAction} to a given {@link Unit}
-     * @param u
-     * @param a
-     */
+
     public void addUnitAction(Unit u, UnitAction a) {
         actions.add(new Pair<>(u, a));
     }
@@ -141,11 +115,7 @@ public class PlayerAction {
     }
     
     
-    /**
-     * Merges this with another PlayerAction
-     * @param a
-     * @return
-     */
+
     public PlayerAction merge(PlayerAction a) {
         PlayerAction merge = new PlayerAction();
         merge.actions.addAll(actions);
@@ -159,15 +129,11 @@ public class PlayerAction {
      * Returns a list of pairs of units and UnitActions
      * @return
      */
-    public List<Pair<Unit,UnitAction>> getActions() {
+    public List<Pair<Unit, UnitAction>> getActions() {
         return actions;
     }
     
-    /**
-     * Searches for the unit in the collection and returns the respective {@link UnitAction}
-     * @param u
-     * @return
-     */
+
     public UnitAction getAction(Unit u) {
 		for (Pair<Unit, UnitAction> tmp : actions) {
 			if (tmp.m_a == u)
@@ -175,13 +141,7 @@ public class PlayerAction {
 		}
 		return null;
     }
-    
-    /**
-     * @param lu
-     * @param u
-     * @param s
-     * @return
-     */
+
     public List<PlayerAction> cartesianProduct(List<UnitAction> lu, Unit u, GameState s) {
         List<PlayerAction> l = new LinkedList<>();
         
@@ -232,7 +192,7 @@ public class PlayerAction {
 						}
 					}
                     if (!found) {
-                        actions.add(new Pair<>(u, new UnitAction(UnitAction.TYPE_NONE, duration)));
+                        actions.add(new Pair<>(u, new UnitAction(ActionType.NONE, duration)));
                     }
                 }
             }
@@ -269,7 +229,7 @@ public class PlayerAction {
     public PlayerAction clone() {
         PlayerAction clone = new PlayerAction();
         clone.actions = new LinkedList<>();
-        for(Pair<Unit,UnitAction> tmp:actions) {
+        for(Pair<Unit, UnitAction> tmp:actions) {
             clone.actions.add(new Pair<>(tmp.m_a, tmp.m_b));
         }
         clone.r = r.clone();
@@ -290,7 +250,7 @@ public class PlayerAction {
      */
     public String toString() {
         StringBuilder tmp = new StringBuilder("{ ");
-        for(Pair<Unit,UnitAction> ua:actions) {
+        for(Pair<Unit, UnitAction> ua:actions) {
             tmp.append("(").append(ua.m_a).append(",").append(ua.m_b).append(")");
         }
         return tmp + " }";
@@ -303,7 +263,7 @@ public class PlayerAction {
      */
     public void toxml(XMLWriter w) {
         w.tag("PlayerAction");
-        for(Pair<Unit,UnitAction> ua:actions) {
+        for(Pair<Unit, UnitAction> ua:actions) {
             w.tagWithAttributes("action", "unitID=\"" + ua.m_a.getID() + "\"");
             ua.m_b.toxml(w);
             w.tag("/action");
@@ -320,7 +280,7 @@ public class PlayerAction {
     public void toJSON(Writer w) throws Exception {
         boolean first = true;
         w.write("[");
-        for(Pair<Unit,UnitAction> ua:actions) {
+        for(Pair<Unit, UnitAction> ua:actions) {
             if (!first) w.write(" ,");
             w.write("{\"unitID\":" + ua.m_a.getID() + ", \"unitAction\":");
             ua.m_b.toJSON(w);
@@ -393,7 +353,7 @@ public class PlayerAction {
 		for (Unit u : gs.getPhysicalGameState().getUnits()) {
 			UnitActionAssignment uaa = gs.unitActions.get(u);
 			if (uaa != null) {
-				ResourceUsage ru = uaa.action.resourceUsage(u, gs.getPhysicalGameState());
+				ResourceUsage ru = uaa.getAction().resourceUsage(u, gs.getPhysicalGameState());
 				base_ru.merge(ru);
 			}
         }

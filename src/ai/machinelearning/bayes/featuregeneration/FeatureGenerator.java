@@ -14,7 +14,6 @@ import org.jdom.input.SAXBuilder;
 import rts.GameState;
 import rts.Trace;
 import rts.TraceEntry;
-import rts.UnitAction;
 import rts.units.Unit;
 import util.Pair;
 
@@ -46,7 +45,7 @@ public abstract class FeatureGenerator {
             int winner = lastgs.winner();
             for(TraceEntry te:t.getEntries()) {
                 GameState gs = t.getGameStateAtCycle(te.getTime());
-                for(Pair<Unit,UnitAction> tmp:te.getActions()) {
+                for(Pair<Unit, UnitAction1> tmp:te.getActions()) {
                     if (tmp.m_a.getUnitActions(gs).size()>1) {
                         if (tmp.m_a.getPlayer()==winner) {
                             TrainingInstance ti = new TrainingInstance(gs, tmp.m_a.getID(), tmp.m_b);

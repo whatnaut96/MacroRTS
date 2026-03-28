@@ -13,7 +13,6 @@ import org.jdom.Element;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 import util.XMLWriter;
@@ -44,7 +43,7 @@ public abstract class AbstractAction {
     public abstract boolean completed(GameState pgs);
     
     
-    public UnitAction execute(GameState pgs){
+    public UnitAction1 execute(GameState pgs){
     	return execute(pgs,null);
     }
 
@@ -94,5 +93,5 @@ public abstract class AbstractAction {
     }
     
     
-    public abstract UnitAction execute(GameState pgs, ResourceUsage ru);
+    public abstract UnitAction1 execute(GameState pgs, ResourceUsage ru);
 }

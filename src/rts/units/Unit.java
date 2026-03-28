@@ -12,7 +12,6 @@ import com.eclipsesource.json.JsonObject;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.Player;
-import rts.UnitAction;
 import util.XMLWriter;
 
 /**
@@ -354,7 +353,7 @@ public class Unit implements Serializable {
      * @return
      */
     public boolean isIdle(GameState s) {
-        UnitAction ua = s.getUnitAction(this);
+        UnitAction1 ua = s.getUnitAction(this);
         return ua == null;
     }
 
@@ -365,7 +364,7 @@ public class Unit implements Serializable {
      * @param s
      * @return
      */
-    public List<UnitAction> getUnitActions(GameState s) {
+    public List<UnitAction1> getUnitActions(GameState s) {
         // Unless specified, generate "NONE" actions with duration 10 cycles
         return getUnitActions(s, 10);
     }
@@ -379,8 +378,8 @@ public class Unit implements Serializable {
      * always generated
      * @return
      */
-    public List<UnitAction> getUnitActions(GameState s, int noneDuration) {
-        List<UnitAction> l = new ArrayList<>();
+    public List<UnitAction1> getUnitActions(GameState s, int noneDuration) {
+        List<UnitAction1> l = new ArrayList<>();
 
         PhysicalGameState pgs = s.getPhysicalGameState();
         Player p = pgs.getPlayer(player);
@@ -409,16 +408,16 @@ public class Unit implements Serializable {
         if (type.canAttack) {
             if (type.attackRange == 1) {
                 if (y > 0 && uup != null && uup.player != player && uup.player >= 0) {
-                    l.add(new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, uup.x, uup.y));
+                    l.add(new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, uup.x, uup.y));
                 }
                 if (x < pgs.getWidth() - 1 && uright != null && uright.player != player && uright.player >= 0) {
-                    l.add(new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, uright.x, uright.y));
+                    l.add(new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, uright.x, uright.y));
                 }
                 if (y < pgs.getHeight() - 1 && udown != null && udown.player != player && udown.player >= 0) {
-                    l.add(new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, udown.x, udown.y));
+                    l.add(new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, udown.x, udown.y));
                 }
                 if (x > 0 && uleft != null && uleft.player != player && uleft.player >= 0) {
-                    l.add(new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, uleft.x, uleft.y));
+                    l.add(new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, uleft.x, uleft.y));
                 }
             } else {
                 int sqrange = type.attackRange * type.attackRange;
@@ -429,7 +428,7 @@ public class Unit implements Serializable {
                     int sq_dx = (u.x - x) * (u.x - x);
                     int sq_dy = (u.y - y) * (u.y - y);
                     if (sq_dx + sq_dy <= sqrange) {
-                        l.add(new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, u.x, u.y));
+                        l.add(new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, u.x, u.y));
                     }
                 }
             }
@@ -441,31 +440,31 @@ public class Unit implements Serializable {
             // harvest:
             if (resources == 0) {
                 if (y > 0 && uup != null && uup.type.isResource) {
-                    l.add(new UnitAction(UnitAction.TYPE_HARVEST, UnitAction.DIRECTION_UP));
+                    l.add(new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_UP));
                 }
                 if (x < pgs.getWidth() - 1 && uright != null && uright.type.isResource) {
-                    l.add(new UnitAction(UnitAction.TYPE_HARVEST, UnitAction.DIRECTION_RIGHT));
+                    l.add(new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_RIGHT));
                 }
                 if (y < pgs.getHeight() - 1 && udown != null && udown.type.isResource) {
-                    l.add(new UnitAction(UnitAction.TYPE_HARVEST, UnitAction.DIRECTION_DOWN));
+                    l.add(new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_DOWN));
                 }
                 if (x > 0 && uleft != null && uleft.type.isResource) {
-                    l.add(new UnitAction(UnitAction.TYPE_HARVEST, UnitAction.DIRECTION_LEFT));
+                    l.add(new UnitAction1(UnitAction1.TYPE_HARVEST, UnitAction1.DIRECTION_LEFT));
                 }
             }
             // return:
             if (resources > 0) {
                 if (y > 0 && uup != null && uup.type.isStockpile && uup.player == player) {
-                    l.add(new UnitAction(UnitAction.TYPE_RETURN, UnitAction.DIRECTION_UP));
+                    l.add(new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_UP));
                 }
                 if (x < pgs.getWidth() - 1 && uright != null && uright.type.isStockpile && uright.player == player) {
-                    l.add(new UnitAction(UnitAction.TYPE_RETURN, UnitAction.DIRECTION_RIGHT));
+                    l.add(new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_RIGHT));
                 }
                 if (y < pgs.getHeight() - 1 && udown != null && udown.type.isStockpile && udown.player == player) {
-                    l.add(new UnitAction(UnitAction.TYPE_RETURN, UnitAction.DIRECTION_DOWN));
+                    l.add(new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_DOWN));
                 }
                 if (x > 0 && uleft != null && uleft.type.isStockpile && uleft.player == player) {
-                    l.add(new UnitAction(UnitAction.TYPE_RETURN, UnitAction.DIRECTION_LEFT));
+                    l.add(new UnitAction1(UnitAction1.TYPE_RETURN, UnitAction1.DIRECTION_LEFT));
                 }
             }
         }
@@ -480,16 +479,16 @@ public class Unit implements Serializable {
                 int tleft = (x > 0 ? pgs.getTerrain(x - 1, y) : PhysicalGameState.TERRAIN_WALL);
 
                 if (tup == PhysicalGameState.TERRAIN_NONE && pgs.getUnitAt(x, y - 1) == null) {
-                    l.add(new UnitAction(UnitAction.TYPE_PRODUCE, UnitAction.DIRECTION_UP, ut));
+                    l.add(new UnitAction1(UnitAction1.TYPE_PRODUCE, UnitAction1.DIRECTION_UP, ut));
                 }
                 if (tright == PhysicalGameState.TERRAIN_NONE && pgs.getUnitAt(x + 1, y) == null) {
-                    l.add(new UnitAction(UnitAction.TYPE_PRODUCE, UnitAction.DIRECTION_RIGHT, ut));
+                    l.add(new UnitAction1(UnitAction1.TYPE_PRODUCE, UnitAction1.DIRECTION_RIGHT, ut));
                 }
                 if (tdown == PhysicalGameState.TERRAIN_NONE && pgs.getUnitAt(x, y + 1) == null) {
-                    l.add(new UnitAction(UnitAction.TYPE_PRODUCE, UnitAction.DIRECTION_DOWN, ut));
+                    l.add(new UnitAction1(UnitAction1.TYPE_PRODUCE, UnitAction1.DIRECTION_DOWN, ut));
                 }
                 if (tleft == PhysicalGameState.TERRAIN_NONE && pgs.getUnitAt(x - 1, y) == null) {
-                    l.add(new UnitAction(UnitAction.TYPE_PRODUCE, UnitAction.DIRECTION_LEFT, ut));
+                    l.add(new UnitAction1(UnitAction1.TYPE_PRODUCE, UnitAction1.DIRECTION_LEFT, ut));
                 }
             }
         }
@@ -502,21 +501,21 @@ public class Unit implements Serializable {
             int tleft = (x > 0 ? pgs.getTerrain(x - 1, y) : PhysicalGameState.TERRAIN_WALL);
 
             if (tup == PhysicalGameState.TERRAIN_NONE && uup == null) {
-                l.add(new UnitAction(UnitAction.TYPE_MOVE, UnitAction.DIRECTION_UP));
+                l.add(new UnitAction1(UnitAction1.TYPE_MOVE, UnitAction1.DIRECTION_UP));
             }
             if (tright == PhysicalGameState.TERRAIN_NONE && uright == null) {
-                l.add(new UnitAction(UnitAction.TYPE_MOVE, UnitAction.DIRECTION_RIGHT));
+                l.add(new UnitAction1(UnitAction1.TYPE_MOVE, UnitAction1.DIRECTION_RIGHT));
             }
             if (tdown == PhysicalGameState.TERRAIN_NONE && udown == null) {
-                l.add(new UnitAction(UnitAction.TYPE_MOVE, UnitAction.DIRECTION_DOWN));
+                l.add(new UnitAction1(UnitAction1.TYPE_MOVE, UnitAction1.DIRECTION_DOWN));
             }
             if (tleft == PhysicalGameState.TERRAIN_NONE && uleft == null) {
-                l.add(new UnitAction(UnitAction.TYPE_MOVE, UnitAction.DIRECTION_LEFT));
+                l.add(new UnitAction1(UnitAction1.TYPE_MOVE, UnitAction1.DIRECTION_LEFT));
             }
         }
 
         // units can always stay idle:
-        l.add(new UnitAction(UnitAction.TYPE_NONE, noneDuration));
+        l.add(new UnitAction1(UnitAction1.TYPE_NONE, noneDuration));
 
         return l;
     }
@@ -528,8 +527,8 @@ public class Unit implements Serializable {
      * @param gs
      * @return
      */
-    public boolean canExecuteAction(UnitAction ua, GameState gs) {
-        List<UnitAction> l = getUnitActions(gs, ua.ETA(this));
+    public boolean canExecuteAction(UnitAction1 ua, GameState gs) {
+        List<UnitAction1> l = getUnitActions(gs, ua.ETA(this));
         return l.contains(ua);
     }
 

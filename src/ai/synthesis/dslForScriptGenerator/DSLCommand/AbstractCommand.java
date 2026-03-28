@@ -25,7 +25,6 @@ import rts.GameState;
 import rts.PhysicalGameState;
 import rts.PlayerAction;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import util.Pair;
 
@@ -147,7 +146,7 @@ public abstract class AbstractCommand implements ICommand{
     
     protected ResourceUsage getResourcesUsed(PlayerAction currentPlayerAction, PhysicalGameState pgs) {
         ResourceUsage res = new ResourceUsage();
-        for (Pair<Unit, UnitAction> action : currentPlayerAction.getActions()) {
+        for (Pair<Unit, UnitAction1> action : currentPlayerAction.getActions()) {
             if(action.m_a != null && action.m_b != null){
                 res.merge(action.m_b.resourceUsage(action.m_a, pgs));
             }
@@ -299,7 +298,7 @@ public abstract class AbstractCommand implements ICommand{
     
     protected int getResourcesInCurrentAction(PlayerAction currentPlayerAction) {
         int resources = 0;
-        for (Pair<Unit, UnitAction> action : currentPlayerAction.getActions()) {
+        for (Pair<Unit, UnitAction1> action : currentPlayerAction.getActions()) {
             if (action.m_b.getUnitType() != null) {
                 resources += action.m_b.getUnitType().cost;
             }

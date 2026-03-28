@@ -24,7 +24,6 @@ import rts.PhysicalGameState;
 import rts.PlayerAction;
 import rts.PlayerActionGenerator;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.UnitActionAssignment;
 import rts.units.Unit;
 import util.Pair;
@@ -324,7 +323,7 @@ public class LSI extends AIWithComputationBudget {
         // epochal unit subselections
         if (epochal) {
             // remove used units from current epoch
-            for (Pair<Unit, UnitAction> actionPair : playerAction.getActions()) {
+            for (Pair<Unit, UnitAction1> actionPair : playerAction.getActions()) {
                 epochUnits.remove(actionPair.m_a);
             }
             // if there are no more units in this epoch use the next one
@@ -351,7 +350,7 @@ public class LSI extends AIWithComputationBudget {
         int reducedActionCount = actionCount;
         int i = 0;
         for (UnitActionTableEntry entry : unitActionTable) {
-            for (UnitAction action : entry.actions) {
+            for (UnitAction1 action : entry.actions) {
                 PlayerAction neighbourPA = currentPA.clone();
                 neighbourPA.getActions().set(i, new Pair<>(entry.u, action));
                 if (!isPlayerActionValid(gameState, neighbourPA)) {
@@ -368,7 +367,7 @@ public class LSI extends AIWithComputationBudget {
             double[] distribution = new double[entry.nactions];
             int idx = 0;
             double min = Double.POSITIVE_INFINITY;
-            for (UnitAction action : entry.actions) {
+            for (UnitAction1 action : entry.actions) {
                 PlayerAction neighbourPA = currentPA.clone();
                 neighbourPA.getActions().set(i, new Pair<>(entry.u, action));
 
@@ -434,7 +433,7 @@ public class LSI extends AIWithComputationBudget {
             for (UnitActionTableEntry entry : unitActionTable) {
                 // over all actions of the agent
                 int actionIndex = 0;
-                for (UnitAction action : entry.actions) {
+                for (UnitAction1 action : entry.actions) {
                     PlayerAction neighbourPA = new PlayerAction();
 
                     // TODO: simplify down here
@@ -457,7 +456,7 @@ public class LSI extends AIWithComputationBudget {
                     // reorder the actions in neighbourPA to be the same as in unitActionTable
                     PlayerAction orderedNeighbourPA = new PlayerAction();
                     for (UnitActionTableEntry agentTableEntry : unitActionTable) {
-                        for (Pair<Unit, UnitAction> neighbourPair : neighbourPA.getActions()) {
+                        for (Pair<Unit, UnitAction1> neighbourPair : neighbourPA.getActions()) {
                             if (neighbourPair.m_a.equals(agentTableEntry.u)) {
                                 orderedNeighbourPA.addUnitAction(neighbourPair.m_a, neighbourPair.m_b);
                             }
@@ -554,7 +553,7 @@ public class LSI extends AIWithComputationBudget {
             int agentIndex = 0;
             for (UnitActionTableEntry entry : unitActionTable) {
                 // over all actions of the agent
-                for (UnitAction action : entry.actions) {
+                for (UnitAction1 action : entry.actions) {
                     PlayerAction neighbourPA = new PlayerAction();
                     for (UnitActionTableEntry rndEntry : unitActionTable) {
                         neighbourPA.addUnitAction(rndEntry.u, rndEntry.actions.get(rnd.nextInt(rndEntry.nactions)));
@@ -615,7 +614,7 @@ public class LSI extends AIWithComputationBudget {
     private void updateActionEvalSingle(List<UnitActionTableEntry> unitActionTable, PlayerAction playerAction, int agentIndex, double eval) {
         int actionIndex = 0;
         UnitActionTableEntry agentEntry = unitActionTable.get(agentIndex);
-        for (UnitAction unitAction : agentEntry.actions) {
+        for (UnitAction1 unitAction : agentEntry.actions) {
             if (unitAction.equals(playerAction.getActions().get(agentIndex).m_b)) {
                 agentEntry.accum_evaluation[actionIndex] =
                         (agentEntry.accum_evaluation[actionIndex] * agentEntry.visit_count[actionIndex] + eval)
@@ -631,7 +630,7 @@ public class LSI extends AIWithComputationBudget {
         agentIndex = 0;
         for (UnitActionTableEntry agentEntry : unitActionTable) {
             int actionIndex = 0;
-            for (UnitAction unitAction : agentEntry.actions) {
+            for (UnitAction1 unitAction : agentEntry.actions) {
                 if (unitAction.equals(playerAction.getActions().get(agentIndex).m_b)) {
                     agentEntry.accum_evaluation[actionIndex] =
                             (agentEntry.accum_evaluation[actionIndex] * agentEntry.visit_count[actionIndex] + eval)
@@ -957,13 +956,13 @@ public class LSI extends AIWithComputationBudget {
         for (Unit u : pgs.getUnits()) {
             UnitActionAssignment uaa = gs.getUnitActions().get(u);
             if (uaa != null) {
-                ResourceUsage ru = uaa.action.resourceUsage(u, pgs);
+                ResourceUsage ru = uaa.getAction().resourceUsage(u, pgs);
                 stateResourceUsage.merge(ru);
             }
         }
 
         ResourceUsage actionResourceUsage = new ResourceUsage();
-        for (Pair<Unit, UnitAction> element : playerAction.getActions()) {
+        for (Pair<Unit, UnitAction1> element : playerAction.getActions()) {
             ResourceUsage resourceUsage = element.m_b.resourceUsage(element.m_a, pgs);
             actionResourceUsage.merge(resourceUsage);
         }
@@ -978,7 +977,7 @@ public class LSI extends AIWithComputationBudget {
         actionCount = 0;
         PlayerActionGenerator moveGenerator = new PlayerActionGenerator(gameState, player);
         int idx = 0;
-        for (Pair<Unit, List<UnitAction>> choice : moveGenerator.getChoices()) {
+        for (Pair<Unit, List<UnitAction1>> choice : moveGenerator.getChoices()) {
             UnitActionTableEntry ae = new UnitActionTableEntry();
             ae.idx = idx;
             ae.u = choice.m_a;

@@ -9,7 +9,6 @@ import ai.abstraction.AbstractAction;
 import ai.abstraction.Harvest;
 import ai.abstraction.pathfinding.PathFinding;
 import rts.GameState;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 import rts.units.UnitTypeTable;
@@ -29,7 +28,7 @@ public class UnitScriptHarvest extends UnitScript {
         utt = a_utt;
     }
     
-    public UnitAction getAction(Unit u, GameState gs) {
+    public UnitAction1 getAction(Unit u, GameState gs) {
         if (action.completed(gs)) {
             return null;
         } else {

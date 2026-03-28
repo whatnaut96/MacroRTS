@@ -58,7 +58,7 @@ public abstract class AbstractionLayerAI extends AIWithComputationBudget {
     public PlayerAction translateActions(int player, GameState gs) {        
         PhysicalGameState pgs = gs.getPhysicalGameState();
         PlayerAction pa = new PlayerAction();
-        List<Pair<Unit, UnitAction>> desires = new ArrayList<>();
+        List<Pair<Unit, UnitAction1>> desires = new ArrayList<>();
 
         lastGameState = gs;
         
@@ -75,11 +75,11 @@ public abstract class AbstractionLayerAI extends AIWithComputationBudget {
                     toDelete.add(aa.unit);
                 } else {
                     if (gs.getActionAssignment(aa.unit) == null) {
-                        UnitAction ua = aa.execute(gs, ru);
+                        UnitAction1 ua = aa.execute(gs, ru);
                         if (ua != null) {
                             if (VERIFY_ACTION_CORRECTNESS) {
                                 // verify that the action is actually feasible:
-                                List<UnitAction> ual = aa.unit.getUnitActions(gs);
+                                List<UnitAction1> ual = aa.unit.getUnitActions(gs);
                                 if (ual.contains(ua)) {
                                     desires.add(new Pair<>(aa.unit, ua));
                                 }
@@ -100,7 +100,7 @@ public abstract class AbstractionLayerAI extends AIWithComputationBudget {
         // compose desires:
         ResourceUsage r = gs.getResourceUsage();
         pa.setResourceUsage(r);
-        for (Pair<Unit, UnitAction> desire : desires) {
+        for (Pair<Unit, UnitAction1> desire : desires) {
             ResourceUsage r2 = desire.m_b.resourceUsage(desire.m_a, pgs);
             if (pa.consistentWith(r2, gs)) {
                 pa.addUnitAction(desire.m_a, desire.m_b);

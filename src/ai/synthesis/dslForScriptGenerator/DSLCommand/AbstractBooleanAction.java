@@ -7,7 +7,6 @@ package ai.synthesis.dslForScriptGenerator.DSLCommand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import ai.synthesis.dslForScriptGenerator.DSLCommandInterfaces.ICommand;
@@ -15,7 +14,6 @@ import ai.abstraction.pathfinding.AStarPathFinding;
 import ai.abstraction.pathfinding.PathFinding;
 import rts.GameState;
 import rts.PlayerAction;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 
@@ -54,7 +52,7 @@ public abstract class AbstractBooleanAction extends AbstractCommand {
     protected void temporalWaitActions(GameState game, int player, ArrayList<Unit> unitstoApplyWait, PlayerAction currentPlayerAction) {
         for (Unit u : game.getUnits()) {
             if (unitstoApplyWait.contains(u) && u.getPlayer() == player) {
-                currentPlayerAction.addUnitAction(u, new UnitAction(0));
+                currentPlayerAction.addUnitAction(u, new UnitAction1(0));
             }
         }
 

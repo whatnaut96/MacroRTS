@@ -7,7 +7,6 @@ package ai.abstraction;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 import util.XMLWriter;
@@ -45,7 +44,7 @@ public class Train extends AbstractAction {
         w.tag("/Train");
     }     
     
-    public UnitAction execute(GameState gs, ResourceUsage ru) {
+    public UnitAction1 execute(GameState gs, ResourceUsage ru) {
         // find the best location for the unit:
         PhysicalGameState pgs = gs.getPhysicalGameState();
         int x = unit.getX();
@@ -57,28 +56,28 @@ public class Train extends AbstractAction {
             int score = score(x,y-1, type, unit.getPlayer(), pgs);
             if (score>best_score || best_direction==-1) {
                 best_score = score;
-                best_direction = UnitAction.DIRECTION_UP;
+                best_direction = UnitAction1.DIRECTION_UP;
             }
         }
         if (x<pgs.getWidth()-1 && gs.free(x+1,y)) {
             int score = score(x+1,y, type, unit.getPlayer(), pgs);
             if (score>best_score || best_direction==-1) {
                 best_score = score;
-                best_direction = UnitAction.DIRECTION_RIGHT;
+                best_direction = UnitAction1.DIRECTION_RIGHT;
             }
         }
         if (y<pgs.getHeight()-1 && gs.free(x,y+1)) {
             int score = score(x,y+1, type, unit.getPlayer(), pgs);
             if (score>best_score || best_direction==-1) {
                 best_score = score;
-                best_direction = UnitAction.DIRECTION_DOWN;
+                best_direction = UnitAction1.DIRECTION_DOWN;
             }
         }
         if (x>0 && gs.free(x-1,y)) {
             int score = score(x-1,y, type, unit.getPlayer(), pgs);
             if (score>best_score || best_direction==-1) {
                 best_score = score;
-                best_direction = UnitAction.DIRECTION_LEFT;
+                best_direction = UnitAction1.DIRECTION_LEFT;
             }
         }
         
@@ -88,7 +87,7 @@ public class Train extends AbstractAction {
 
 
         if (best_direction!=-1) {
-            UnitAction ua = new UnitAction(UnitAction.TYPE_PRODUCE,best_direction, type);
+            UnitAction1 ua = new UnitAction1(UnitAction1.TYPE_PRODUCE,best_direction, type);
             if (gs.isUnitActionAllowed(unit, ua)) return ua;
         }
         

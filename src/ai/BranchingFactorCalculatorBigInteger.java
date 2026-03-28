@@ -15,8 +15,8 @@ import rts.PhysicalGameState;
 import rts.PlayerAction;
 import rts.PlayerActionGenerator;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
+import rts.units.UnitAction;
 import util.Pair;
 
 
@@ -65,7 +65,7 @@ public class BranchingFactorCalculatorBigInteger {
             pa = pag.getNextAction(-1);
             if (pa!=null) {
                 int r = 0;
-                for(Pair<Unit,UnitAction> tmp:pa.getActions()) {
+                for(Pair<Unit, UnitAction1> tmp:pa.getActions()) {
                     r+=tmp.m_b.resourceUsage(tmp.m_a, gs.getPhysicalGameState()).getResourcesUsed(player);
                 }
 //                n[(pa.getResourceUsage()).getResourcesUsed(player)]++;
@@ -125,9 +125,9 @@ public class BranchingFactorCalculatorBigInteger {
         int ID = 1;
         for(Unit u:gs2.getUnits()) {
             if (u.getPlayer()==player && gs2.getUnitAction(u)==null) {               
-                List<UnitAction> ual = u.getUnitActions(gs2);
+                List<UnitAction1> ual = u.getUnitActions(gs2);
                 addFootPrint(separation,ID,u.getX(), u.getY());
-                for(UnitAction ua:ual) {
+                for(UnitAction1 ua:ual) {
                     ResourceUsage ru = (ResourceUsage)ua.resourceUsage(u, gs2.getPhysicalGameState());
                     for(int pos:ru.getPositionsUsed()) {
                         int x = pos%pgs2.getWidth();
@@ -232,9 +232,9 @@ public class BranchingFactorCalculatorBigInteger {
                 // Compute the set of positions required by all the other units (plus resources):
                 for(Unit u2:gs2.getUnits()) {
                     if (u2!=u && u2.getPlayer()==player && gs2.getUnitAction(u2)==null) {
-                        List<UnitAction> ual = u2.getUnitActions(gs2);
+                        List<UnitAction1> ual = u2.getUnitActions(gs2);
                         int maxResources = 0;
-                        for(UnitAction ua:ual) {
+                        for(UnitAction1 ua:ual) {
                             ResourceUsage ru = ua.resourceUsage(u2, pgs2);
                             positionsUsed.addAll(ru.getPositionsUsed());
                             maxResources = Math.max(maxResources,ru.getResourcesUsed(player));
@@ -247,13 +247,13 @@ public class BranchingFactorCalculatorBigInteger {
 //                if (DEBUG>=1) System.out.println("  Positions Used: " + positionsUsed);
 //                if (DEBUG>=1) System.out.println("  Resources Used: " + resourcesUsed);
                 
-                List<UnitAction> ual = u.getUnitActions(gs2);
+                List<UnitAction1> ual = u.getUnitActions(gs2);
                 boolean positionConflict = false;
                 BigInteger []unitBranching = new BigInteger[playerResources+1];
                 for(int i = 0;i<playerResources+1;i++) {
                     unitBranching[i] = BigInteger.ZERO;
                 }
-                for(UnitAction ua:ual) {
+                for(UnitAction1 ua:ual) {
                     ResourceUsage ru = ua.resourceUsage(u, pgs2);
                     int i = ru.getResourcesUsed(player);
                     unitBranching[i] = unitBranching[i].add(BigInteger.ONE);
@@ -267,7 +267,7 @@ public class BranchingFactorCalculatorBigInteger {
                 if (!positionConflict) {
                     unitsToSeparate.add(u);
                     branchingOfSeparatedUnits.add(unitBranching);
-                    pa.addUnitAction(u, new UnitAction(UnitAction.TYPE_NONE));                    
+                    pa.addUnitAction(u, new UnitAction1(UnitAction1.TYPE_NONE));
                     if (DEBUG>=1) System.out.println("  *** Separating unit " + u);
                 } else {
                     unitsThatCannotBeSeparated.add(u);

@@ -128,7 +128,7 @@ public class PartiallyObservableGameState extends GameState {
             vectorObservation[player][3][u.getY()][u.getX()] = u.getType().ID + 1;
             
             if (uaa != null) {
-                vectorObservation[player][4][u.getY()][u.getX()] = uaa.action.type;
+                vectorObservation[player][4][u.getY()][u.getX()] = uaa.getAction().type;
             } else {
                 // Commented line of code is unnecessary: already initialised to 0
             	//vectorObservation[player][4][u.getY()][u.getX()] = UnitAction.TYPE_NONE;

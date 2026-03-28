@@ -8,7 +8,6 @@ package ai.ahtn.domain;
 
 import java.util.HashMap;
 import rts.GameState;
-import rts.UnitAction;
 
 /**
  *
@@ -33,13 +32,13 @@ public class PredefinedFunctions {
                                 int pos = ((IntegerConstant)f.parameters[0]).value;
                                 int dir = ((IntegerConstant)f.parameters[1]).value;
                                 switch(dir) {
-                                    case UnitAction.DIRECTION_UP:
+                                    case UnitAction1.DIRECTION_UP:
                                         return new IntegerConstant(pos - gs.getPhysicalGameState().getWidth());
-                                    case UnitAction.DIRECTION_RIGHT:
+                                    case UnitAction1.DIRECTION_RIGHT:
                                         return new IntegerConstant(pos + 1);
-                                    case UnitAction.DIRECTION_DOWN:
+                                    case UnitAction1.DIRECTION_DOWN:
                                         return new IntegerConstant(pos + gs.getPhysicalGameState().getWidth());
-                                    case UnitAction.DIRECTION_LEFT:
+                                    case UnitAction1.DIRECTION_LEFT:
                                         return new IntegerConstant(pos - 1);
                                 }
                             }

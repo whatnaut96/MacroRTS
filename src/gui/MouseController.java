@@ -111,7 +111,7 @@ public class MouseController extends AbstractionLayerAI {
                 // The unit is dead:
                 toDelete.add(aa.getUnit());
             } else if (gs.getActionAssignment(aa.getUnit())==null) {
-                UnitAction ua = aa.execute(gs);
+                UnitAction1 ua = aa.execute(gs);
                 if (ua!=null) {
                     pa.addUnitAction(aa.getUnit(), ua);
                     ResourceUsage r2 = ua.resourceUsage(aa.getUnit(), pgs);

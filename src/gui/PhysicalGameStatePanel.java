@@ -19,7 +19,6 @@ import javax.swing.JPanel;
 import rts.GameState;
 import rts.PartiallyObservableGameState;
 import rts.PhysicalGameState;
-import rts.UnitAction;
 import rts.UnitActionAssignment;
 import rts.units.Unit;
 import util.Pair;
@@ -404,41 +403,41 @@ public class PhysicalGameStatePanel extends JPanel {
             if (uaa!=null) {
                 int offsx = 0;
                 int offsy = 0;
-                if (uaa.action.getType()==UnitAction.TYPE_ATTACK_LOCATION) {
-                    offsx = (uaa.action.getLocationX() - u.getX())*grid;
-                    offsy = (uaa.action.getLocationY() - u.getY())*grid;
+                if (uaa.getAction().getType()== UnitAction1.TYPE_ATTACK_LOCATION) {
+                    offsx = (uaa.getAction().getLocationX() - u.getX())*grid;
+                    offsy = (uaa.getAction().getLocationY() - u.getY())*grid;
                 } else {
-                    if (uaa.action.getDirection()==UnitAction.DIRECTION_UP) offsy = -grid;
-                    if (uaa.action.getDirection()==UnitAction.DIRECTION_RIGHT) offsx = grid;
-                    if (uaa.action.getDirection()==UnitAction.DIRECTION_DOWN) offsy = grid;
-                    if (uaa.action.getDirection()==UnitAction.DIRECTION_LEFT) offsx = -grid;
+                    if (uaa.getAction().getDirection()== UnitAction1.DIRECTION_UP) offsy = -grid;
+                    if (uaa.getAction().getDirection()== UnitAction1.DIRECTION_RIGHT) offsx = grid;
+                    if (uaa.getAction().getDirection()== UnitAction1.DIRECTION_DOWN) offsy = grid;
+                    if (uaa.getAction().getDirection()== UnitAction1.DIRECTION_LEFT) offsx = -grid;
                 }
-                switch(uaa.action.getType()) {
-                    case UnitAction.TYPE_MOVE:
+                switch(uaa.getAction().getType()) {
+                    case UnitAction1.TYPE_MOVE:
                         g2d.setColor(Color.GRAY);
                         g2d.drawLine(u.getX()*grid+grid/2, u.getY()*grid+grid/2, u.getX()*grid+grid/2 + offsx, u.getY()*grid+grid/2 + offsy);
                         break;
-                    case UnitAction.TYPE_ATTACK_LOCATION:
+                    case UnitAction1.TYPE_ATTACK_LOCATION:
                         g2d.setColor(PLAYER1UNIT_OUTLINE);
                         g2d.drawLine(u.getX()*grid+grid/2, u.getY()*grid+grid/2, u.getX()*grid+grid/2 + offsx, u.getY()*grid+grid/2 + offsy);
                         break;
-                    case UnitAction.TYPE_PRODUCE:
+                    case UnitAction1.TYPE_PRODUCE:
                         g2d.setColor(PLAYER0UNIT_OUTLINE);
                         g2d.drawLine(u.getX() * grid + grid / 2, u.getY() * grid + grid / 2, u.getX() * grid + grid / 2 + offsx, u.getY() * grid + grid / 2 + offsy);
                         // draw building progress bar
-                        int ETA = uaa.time + uaa.action.ETA(uaa.unit) - gs.getTime();
+                        int ETA = uaa.getTime() + uaa.getAction().ETA(uaa.getUnit()) - gs.getTime();
                         g2d.setColor(PLAYER0UNIT_OUTLINE);
                         g2d.fillRect(u.getX() * grid + offsx, u.getY() * grid + offsy,
-                                grid - (int) (grid * (((float) ETA) / uaa.action.ETA(uaa.unit))), (int) (grid / 5.0));
+                                grid - (int) (grid * (((float) ETA) / uaa.getAction().ETA(uaa.getUnit()))), (int) (grid / 5.0));
 
-                        String txt = uaa.action.getUnitType().name;
+                        String txt = uaa.getAction().getUnitType().name;
                         g2d.setColor(PLAYER0UNIT_OUTLINE);
                         FontMetrics fm = g2d.getFontMetrics(g2d.getFont());
                         int width = fm.stringWidth(txt);
                         g2d.drawString(txt, u.getX() * grid + grid / 2 - width / 2 + offsx, u.getY() * grid + grid / 2 + offsy);
                         break;
-                    case UnitAction.TYPE_HARVEST:
-                    case UnitAction.TYPE_RETURN:
+                    case UnitAction1.TYPE_HARVEST:
+                    case UnitAction1.TYPE_RETURN:
                         if (colorScheme==COLORSCHEME_BLACK) g2d.setColor(Color.WHITE);
                         if (colorScheme==COLORSCHEME_WHITE) g2d.setColor(Color.GREEN);
                         g2d.drawLine(u.getX()*grid+grid/2, u.getY()*grid+grid/2, u.getX()*grid+grid/2 + offsx, u.getY()*grid+grid/2 + offsy);

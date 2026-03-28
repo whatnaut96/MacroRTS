@@ -13,7 +13,6 @@ import java.util.List;
 import rts.GameState;
 import rts.PlayerAction;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 
@@ -69,7 +68,7 @@ public class UnitScriptsAI extends AI {
                     if (s==null) s = defaultScript.instantiate(u, gs);
                     scripts.put(u.getID(),s);
                 }
-                UnitAction ua = s.getAction(u, gs);
+                UnitAction1 ua = s.getAction(u, gs);
                 if (ua!=null) {
                     ResourceUsage ru2 = ua.resourceUsage(u, gs.getPhysicalGameState());
                     if (ru.consistentWith(ru2, gs)) {

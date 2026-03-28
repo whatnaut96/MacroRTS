@@ -8,7 +8,6 @@ package ai.portfolio.portfoliogreedysearch;
 import ai.abstraction.AbstractAction;
 import ai.abstraction.Train;
 import rts.GameState;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 
@@ -25,7 +24,7 @@ public class UnitScriptTrain extends UnitScript {
         ut = a_ut;
     }
     
-    public UnitAction getAction(Unit u, GameState gs) {
+    public UnitAction1 getAction(Unit u, GameState gs) {
         if (action.completed(gs)) {
             return null;
         } else {

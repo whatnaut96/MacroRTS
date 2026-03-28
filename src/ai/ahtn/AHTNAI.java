@@ -12,7 +12,6 @@ import java.util.List;
 
 import rts.GameState;
 import rts.PlayerAction;
-import rts.UnitAction;
 import rts.units.Unit;
 import util.Pair;
 import ai.ahtn.domain.DomainDefinition;
@@ -120,7 +119,7 @@ public class AHTNAI extends AIWithComputationBudget {
             for(MethodDecomposition md:actionsBeingExecuted) {
                 if (PredefinedOperators.execute(md, gs, pa)) toDelete.add(md);
                 
-                for(Pair<Unit,UnitAction> ua:pa.getActions()) {
+                for(Pair<Unit, UnitAction1> ua:pa.getActions()) {
                     if (gs.getUnit(ua.m_a.getID())==null) {
                         pa.removeUnitAction(ua.m_a, ua.m_b);
                     }

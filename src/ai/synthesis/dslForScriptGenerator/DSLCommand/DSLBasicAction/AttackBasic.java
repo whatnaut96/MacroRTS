@@ -15,12 +15,11 @@ import ai.abstraction.pathfinding.PathFinding;
 import ai.synthesis.dslForScriptGenerator.DSLCommand.AbstractBasicAction;
 import ai.synthesis.dslForScriptGenerator.DSLCommandInterfaces.IUnitCommand;
 import java.util.HashMap;
-import java.util.HashSet;
+
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.PlayerAction;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 
@@ -58,7 +57,7 @@ public class AttackBasic extends AbstractBasicAction implements IUnitCommand {
             if (game.getActionAssignment(unAlly) == null && unAlly != null && targetEnemy != null) {
                 AbstractAction action = new Attack(unAlly, targetEnemy, pf);
 
-                UnitAction uAct = action.execute(game, resources);
+                UnitAction1 uAct = action.execute(game, resources);
                 
                 if (uAct != null && (uAct.getType() == 5 || uAct.getType() == 1)) {                	
                         setHasDSLUsed();
@@ -130,7 +129,7 @@ public class AttackBasic extends AbstractBasicAction implements IUnitCommand {
         if (game.getActionAssignment(unAlly) == null && unAlly != null && targetEnemy != null && hasInPotentialUnits(game, currentPlayerAction, unAlly, player)) {
             AbstractAction action = new Attack(unAlly, targetEnemy, pf);
 
-            UnitAction uAct = action.execute(game, resources);
+            UnitAction1 uAct = action.execute(game, resources);
 
             if (uAct != null && (uAct.getType() == 5 || uAct.getType() == 1)) {            	
                 setHasDSLUsed();

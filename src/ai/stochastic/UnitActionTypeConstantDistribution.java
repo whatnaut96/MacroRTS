@@ -7,7 +7,6 @@ package ai.stochastic;
 
 import java.util.List;
 import rts.GameState;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 
@@ -22,13 +21,13 @@ public class UnitActionTypeConstantDistribution extends UnitActionProbabilityDis
     public UnitActionTypeConstantDistribution(UnitTypeTable a_utt, double distribution[]) throws Exception {
         super(a_utt);
         
-        if (distribution==null || distribution.length != UnitAction.NUMBER_OF_ACTION_TYPES) throw new Exception("distribution does not have the right number of elements!");
+        if (distribution==null || distribution.length != UnitAction1.NUMBER_OF_ACTION_TYPES) throw new Exception("distribution does not have the right number of elements!");
         m_distribution = distribution;
     }
     
     
     @Override
-    public double[] predictDistribution(Unit u, GameState gs, List<UnitAction> actions) throws Exception
+    public double[] predictDistribution(Unit u, GameState gs, List<UnitAction1> actions) throws Exception
     {
         int nActions = actions.size();
         double d[] = new double[nActions];

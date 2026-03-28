@@ -8,7 +8,6 @@ package ai.machinelearning.bayes;
 import java.util.ArrayList;
 import java.util.List;
 import rts.GameState;
-import rts.UnitAction;
 import rts.units.Unit;
 
 /**
@@ -18,25 +17,25 @@ import rts.units.Unit;
 public class TrainingInstance {
     public GameState gs;
     public Unit u;
-    public UnitAction ua;
+    public UnitAction1 ua;
     
-    public TrainingInstance(GameState a_gs, long uID, UnitAction a_ua) throws Exception {
+    public TrainingInstance(GameState a_gs, long uID, UnitAction1 a_ua) throws Exception {
         gs = a_gs;
         u = gs.getUnit(uID);
         if (u==null) throw new Exception("Unit " + uID + " not found!");
         ua = a_ua;
-        if (ua!=null && ua.getType() == UnitAction.TYPE_ATTACK_LOCATION) {
+        if (ua!=null && ua.getType() == UnitAction1.TYPE_ATTACK_LOCATION) {
             // turn into relative:
-            ua = new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, ua.getLocationX() - u.getX(), ua.getLocationY() - u.getY());
+            ua = new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, ua.getLocationX() - u.getX(), ua.getLocationY() - u.getY());
         }
     }
     
     
-    public List<Integer> getPossibleActions(List<UnitAction> allPossibleActions) {
+    public List<Integer> getPossibleActions(List<UnitAction1> allPossibleActions) {
         List<Integer> l = new ArrayList<>();
-        for(UnitAction ua:u.getUnitActions(gs)) {
-            if (ua.getType()==UnitAction.TYPE_ATTACK_LOCATION) {
-                ua = new UnitAction(UnitAction.TYPE_ATTACK_LOCATION, ua.getLocationX() - u.getX(), ua.getLocationY() - u.getY());
+        for(UnitAction1 ua:u.getUnitActions(gs)) {
+            if (ua.getType()== UnitAction1.TYPE_ATTACK_LOCATION) {
+                ua = new UnitAction1(UnitAction1.TYPE_ATTACK_LOCATION, ua.getLocationX() - u.getX(), ua.getLocationY() - u.getY());
             }
             l.add(allPossibleActions.indexOf(ua));
         }            

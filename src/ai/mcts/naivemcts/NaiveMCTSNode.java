@@ -61,7 +61,7 @@ public class NaiveMCTSNode extends MCTSNode {
             multipliers = new BigInteger[moveGenerator.getChoices().size()];
             BigInteger baseMultiplier = BigInteger.ONE;
             int idx = 0;
-            for (Pair<Unit, List<UnitAction>> choice : moveGenerator.getChoices()) {
+            for (Pair<Unit, List<UnitAction1>> choice : moveGenerator.getChoices()) {
                 UnitActionTableEntry ae = new UnitActionTableEntry();
                 ae.u = choice.m_a;
                 ae.nactions = choice.m_b.size();
@@ -86,7 +86,7 @@ public class NaiveMCTSNode extends MCTSNode {
             multipliers = new BigInteger[moveGenerator.getChoices().size()];
             BigInteger baseMultiplier = BigInteger.ONE;
             int idx = 0;
-            for (Pair<Unit, List<UnitAction>> choice : moveGenerator.getChoices()) {
+            for (Pair<Unit, List<UnitAction1>> choice : moveGenerator.getChoices()) {
                 UnitActionTableEntry ae = new UnitActionTableEntry();
                 ae.u = choice.m_a;
                 ae.nactions = choice.m_b.size();
@@ -254,7 +254,7 @@ public class NaiveMCTSNode extends MCTSNode {
         // Select the best combination that results in a valid playeraction by epsilon-greedy sampling:
         ResourceUsage base_ru = new ResourceUsage();
         for(Unit u:gs.getUnits()) {
-            UnitAction ua = gs.getUnitAction(u);
+            UnitAction1 ua = gs.getUnitAction(u);
             if (ua!=null) {
                 ResourceUsage ru = ua.resourceUsage(u, gs.getPhysicalGameState());
                 base_ru.merge(ru);
@@ -270,7 +270,7 @@ public class NaiveMCTSNode extends MCTSNode {
             try {
                 UnitActionTableEntry ate = unitActionTable.get(i);
                 int code;
-                UnitAction ua;
+                UnitAction1 ua;
                 ResourceUsage r2;
 
                 // try one at random:
@@ -344,7 +344,7 @@ public class NaiveMCTSNode extends MCTSNode {
             int idx = children.indexOf(child);
             PlayerAction pa = actions.get(idx);
 
-            for (Pair<Unit, UnitAction> ua : pa.getActions()) {
+            for (Pair<Unit, UnitAction1> ua : pa.getActions()) {
                 UnitActionTableEntry actionTable = getActionTableEntry(ua.m_a);
                 idx = actionTable.actions.indexOf(ua.m_b);
 

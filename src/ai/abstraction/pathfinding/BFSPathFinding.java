@@ -7,7 +7,6 @@ package ai.abstraction.pathfinding;
 import rts.GameState;
 import rts.PhysicalGameState;
 import rts.ResourceUsage;
-import rts.UnitAction;
 import rts.units.Unit;
 
 /**
@@ -30,7 +29,7 @@ public class BFSPathFinding extends PathFinding {
     
     // This function finds the shortest path from 'start' to 'targetpos' and then returns
     // a UnitAction of the type 'actionType' with the direction of the first step in the shortest path
-    public UnitAction findPath(Unit start, int targetpos, GameState gs, ResourceUsage ru) {        
+    public UnitAction1 findPath(Unit start, int targetpos, GameState gs, ResourceUsage ru) {
         return findPathToPositionInRange(start,targetpos,0,gs,ru);
     }    
     
@@ -38,7 +37,7 @@ public class BFSPathFinding extends PathFinding {
      * This function is like the previous one, but doesn't try to reach 'target', but just to 
      * reach a position that is at most 'range' far away from 'target'
      */
-    public UnitAction findPathToPositionInRange(Unit start, int targetpos, int range, GameState gs, ResourceUsage ru) {
+    public UnitAction1 findPathToPositionInRange(Unit start, int targetpos, int range, GameState gs, ResourceUsage ru) {
         PhysicalGameState pgs = gs.getPhysicalGameState();
         int w = pgs.getWidth();
         int h = pgs.getHeight();
@@ -95,10 +94,10 @@ public class BFSPathFinding extends PathFinding {
                     accumlength++;
 //                    System.out.println("    " + pos%w + "," + pos/w);
                 }
-                if (last == pos+w) return new UnitAction(UnitAction.TYPE_MOVE, UnitAction.DIRECTION_DOWN);
-                if (last == pos-1) return new UnitAction(UnitAction.TYPE_MOVE, UnitAction.DIRECTION_LEFT);
-                if (last == pos-w) return new UnitAction(UnitAction.TYPE_MOVE, UnitAction.DIRECTION_UP);
-                if (last == pos+1) return new UnitAction(UnitAction.TYPE_MOVE, UnitAction.DIRECTION_RIGHT);
+                if (last == pos+w) return new UnitAction1(UnitAction1.TYPE_MOVE, UnitAction1.DIRECTION_DOWN);
+                if (last == pos-1) return new UnitAction1(UnitAction1.TYPE_MOVE, UnitAction1.DIRECTION_LEFT);
+                if (last == pos-w) return new UnitAction1(UnitAction1.TYPE_MOVE, UnitAction1.DIRECTION_UP);
+                if (last == pos+1) return new UnitAction1(UnitAction1.TYPE_MOVE, UnitAction1.DIRECTION_RIGHT);
                 return null;
             }
             
@@ -150,7 +149,7 @@ public class BFSPathFinding extends PathFinding {
      * This function is like the previous one, but doesn't try to reach 'target', but just to 
      * reach a position adjacent to 'target'
      */
-    public UnitAction findPathToAdjacentPosition(Unit start, int targetpos, GameState gs, ResourceUsage ru) {
+    public UnitAction1 findPathToAdjacentPosition(Unit start, int targetpos, GameState gs, ResourceUsage ru) {
         return findPathToPositionInRange(start, targetpos, 1, gs, ru);
     }      
 

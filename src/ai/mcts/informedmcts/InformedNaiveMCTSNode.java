@@ -62,7 +62,7 @@ public class InformedNaiveMCTSNode extends MCTSNode {
             multipliers = new BigInteger[moveGenerator.getChoices().size()];
             BigInteger baseMultiplier = BigInteger.ONE;
             int idx = 0;
-            for (Pair<Unit, List<UnitAction>> choice : moveGenerator.getChoices()) {
+            for (Pair<Unit, List<UnitAction1>> choice : moveGenerator.getChoices()) {
                 double []prior_distribution = model.predictDistribution(choice.m_a, gs, choice.m_b);
                 InformedUnitActionTableEntry ae = new InformedUnitActionTableEntry(choice.m_a, choice.m_b, prior_distribution);
                 unitActionTable.add(ae);
@@ -79,7 +79,7 @@ public class InformedNaiveMCTSNode extends MCTSNode {
             multipliers = new BigInteger[moveGenerator.getChoices().size()];
             BigInteger baseMultiplier = BigInteger.ONE;
             int idx = 0;
-            for (Pair<Unit, List<UnitAction>> choice : moveGenerator.getChoices()) {
+            for (Pair<Unit, List<UnitAction1>> choice : moveGenerator.getChoices()) {
                 double []prior_distribution = model.predictDistribution(choice.m_a, gs, choice.m_b);
                 InformedUnitActionTableEntry ae = new InformedUnitActionTableEntry(choice.m_a, choice.m_b, prior_distribution);
                 unitActionTable.add(ae);
@@ -239,7 +239,7 @@ public class InformedNaiveMCTSNode extends MCTSNode {
         // Select the best combination that results in a valid playeraction by epsilon-greedy sampling:
         ResourceUsage base_ru = new ResourceUsage();
         for(Unit u:gs.getUnits()) {
-            UnitAction ua = gs.getUnitAction(u);
+            UnitAction1 ua = gs.getUnitAction(u);
             if (ua!=null) {
                 ResourceUsage ru = ua.resourceUsage(u, gs.getPhysicalGameState());
                 base_ru.merge(ru);
@@ -255,7 +255,7 @@ public class InformedNaiveMCTSNode extends MCTSNode {
             try {
                 InformedUnitActionTableEntry ate = unitActionTable.get(i);
                 int code;
-                UnitAction ua;
+                UnitAction1 ua;
                 ResourceUsage r2;
 
                 // try one at random:
@@ -329,7 +329,7 @@ public class InformedNaiveMCTSNode extends MCTSNode {
             int idx = children.indexOf(child);
             PlayerAction pa = actions.get(idx);
 
-            for (Pair<Unit, UnitAction> ua : pa.getActions()) {
+            for (Pair<Unit, UnitAction1> ua : pa.getActions()) {
                 InformedUnitActionTableEntry actionTable = getActionTableEntry(ua.m_a);
                 idx = actionTable.actions.indexOf(ua.m_b);
 

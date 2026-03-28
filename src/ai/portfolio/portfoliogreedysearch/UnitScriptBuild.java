@@ -10,7 +10,6 @@ import ai.abstraction.Build;
 import ai.abstraction.pathfinding.PathFinding;
 import rts.GameState;
 import rts.PhysicalGameState;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitType;
 
@@ -29,7 +28,7 @@ public class UnitScriptBuild extends UnitScript {
         ut = a_ut;
     }
     
-    public UnitAction getAction(Unit u, GameState gs) {
+    public UnitAction1 getAction(Unit u, GameState gs) {
         if (action.completed(gs)) {
             return null;
         } else {

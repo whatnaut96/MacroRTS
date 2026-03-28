@@ -21,7 +21,6 @@ import org.jdom.input.SAXBuilder;
 import rts.GameState;
 import rts.Trace;
 import rts.TraceEntry;
-import rts.UnitAction;
 import rts.units.Unit;
 import rts.units.UnitTypeTable;
 import util.Pair;
@@ -77,7 +76,7 @@ public class PretrainNaiveBayesModels {
             }
             X_l.add(x);
         }
-        List<UnitAction> allPossibleActions = BayesianModel.generateAllPossibleUnitActions(utt);
+        List<UnitAction1> allPossibleActions = BayesianModel.generateAllPossibleUnitActions(utt);
         System.out.println(allPossibleActions.size() + " labels: " + allPossibleActions);
         List<Integer> Y_l = new ArrayList<>();
         for(TrainingInstance ti:instances) {
@@ -132,12 +131,12 @@ public class PretrainNaiveBayesModels {
                     Trace t = new Trace(new SAXBuilder().build(fileName).getRootElement());                    
                     for(TraceEntry te:t.getEntries()) {
                         GameState gs = t.getGameStateAtCycle(te.getTime());
-                        for(Pair<Unit,UnitAction> tmp:te.getActions()) {
+                        for(Pair<Unit, UnitAction1> tmp:te.getActions()) {
                             if (tmp.m_a.getUnitActions(gs).size()>1) {
                                 if (tmp.m_a.getPlayer()==playerToLearnFrom) {
                                     TrainingInstance ti = new TrainingInstance(gs, tmp.m_a.getID(), tmp.m_b);
                                     // verify action is possible:
-                                    List<UnitAction> ual = tmp.m_a.getUnitActions(gs);
+                                    List<UnitAction1> ual = tmp.m_a.getUnitActions(gs);
                                     if (!ual.contains(tmp.m_b)) {
                                         System.out.println("invalid instance...: " + tmp.m_b);
                                     } else {

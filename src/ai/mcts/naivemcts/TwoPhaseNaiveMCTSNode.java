@@ -4,8 +4,6 @@
  */
 package ai.mcts.naivemcts;
 
-import static ai.mcts.MCTSNode.r;
-import static ai.mcts.naivemcts.NaiveMCTSNode.DEBUG;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -113,7 +111,7 @@ public class TwoPhaseNaiveMCTSNode extends NaiveMCTSNode {
         // Select the best combination that results in a valid playeraction by epsilon-greedy sampling:
         ResourceUsage base_ru = new ResourceUsage();
         for(Unit u:gs.getUnits()) {
-            UnitAction ua = gs.getUnitAction(u);
+            UnitAction1 ua = gs.getUnitAction(u);
             if (ua!=null) {
                 ResourceUsage ru = ua.resourceUsage(u, gs.getPhysicalGameState());
                 base_ru.merge(ru);
@@ -129,7 +127,7 @@ public class TwoPhaseNaiveMCTSNode extends NaiveMCTSNode {
             try {
                 UnitActionTableEntry ate = unitActionTable.get(i);
                 int code;
-                UnitAction ua;
+                UnitAction1 ua;
                 ResourceUsage r2;
 
                 // try one at random:
